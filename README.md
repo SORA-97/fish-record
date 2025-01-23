@@ -1,27 +1,13 @@
+## このファイルは何？
+環境構築などの手順と、アプリの概要について記述するファイルです。  開発環境の操作方法などについては、`docs/HowTo`を閲覧してください!  
+
 ## 魚図鑑  
 This is Fish record app.  
 
-## ターミナル操作メモ  
-```bash
-# イメージのビルド&コンテナの起動  
-docker compose up -d  
-
-# Webアプリに接続
-http://localhost:3000/  
-
-# 更新
-docker compose up --build -d  
-
-# イメージとコンテナを削除  
-docker compose down --rmi all  
-
-# ボリュームを削除  
-docker compose down --volume
-```
-
 ## .envファイルの作成
-fish-record/.env  
-内容を以下のように記入  
+`.env`  
+
+内容を以下のように記入してください。  
 ```
 # COMMON
 API_PORT=3000

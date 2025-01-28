@@ -66,6 +66,10 @@ def delete_memo(memo_id):
     db.session.commit()
     return redirect(url_for('index'))
 
+# 新しいメモの作成フォームを表示
+@app.route('/account', methods=['GET'])
+def account():
+    return render_template('account.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

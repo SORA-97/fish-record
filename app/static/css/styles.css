@@ -68,7 +68,7 @@ textarea {
 
 .title-border {
     padding-bottom: 4px;
-    margin-bottom: 24px;
+    margin: 0px 20px 24px 20px;
     border-bottom: 2px solid #333333bd;
 }
 

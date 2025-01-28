@@ -1,0 +1,28 @@
+#account {
+    .delete {
+        color: #FFF;
+        background-color: rgb(255, 80, 80);
+    }
+
+    .button {
+        margin-top: 24px;
+    }
+
+    .contents {
+        margin: 24px;
+    }
+
+    .small {
+        margin-top: 12px;
+    }
+
+    .fa-solid {
+        border: 2px solid #333; /* 枠線 */
+    }
+
+    .header-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アカウント設定</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/account.css') }}">
+</head>
+<body>
+    <div id="account" class="container">
+        <div class="header-container">
+            <h1 class="title-border">魚の記録帳</h1>
+            <a href="{{ url_for('account') }}">
+                <i class="fa-solid fa-fish"></i>
+            </a>
+        </div>
+
+        <a href="{{ url_for('index') }}" class="button">ホームに戻る</a>
+
+        <form action="{{ url_for('account') }}" method="POST"class="modern-form">
+            <h2>ユーザ名</h2>
+            <h3 class="contents">ああああ</h1>
+            <h2>パスワードを変更する</h2>
+            <div class="contents">
+                <label for="current_password">現在のパスワード</label>
+                <input type="text" id="current_password" name="current_password" required>
+                <label for="new_password">新しいパスワード</label>
+                <input type="text" id="new_password" name="new_password" required>
+                <button type="submit" class="button">変更</button>
+            </div>
+        </form>
+
+        <form action="{{ url_for('index') }}" method="POST">
+            <button type="submit" class="button">ログアウト</button>
+        </form>
+
+        <form action="{{ url_for('index') }}" method="POST">
+            <button type="submit" class="delete button">アカウントを削除</button>
+        </form>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>魚の記録帳 - 新規作成</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create_record.css') }}">
+</head>
+<body>
+    <div id="create_record" class="container">
+        <h1 class="title-border">記録 - 新規作成</h1>
+
+        <form action="{{ url_for('create_record') }}" method="POST" class="modern-form">
+            <label for="fish_name">魚の種類</label>
+            <input type="text" id="fish_name" name="fish_name" required>
+
+            <label for="location">場所</label>
+            <input type="text" id="location" name="location">
+
+            <div style="display: flex; flex-wrap: wrap; column-gap: 10px; row-gap: 10px;">
+                <div style="flex: 1 1 calc(50% - 10px);">
+                    <label for="length">全長(cm)</label>
+                    <input type="number" id="length" name="length" step="0.01">
+                </div>
+                <div style="flex: 1 1 calc(50% - 10px);">
+                    <label for="date">日付</label>
+                    <input type="date" id="date" name="date">
+                </div>
+            </div>
+            <label for="memo">メモ</label>
+            <textarea id="memo" name="memo"></textarea>
+            <button type="submit" class="button">記録を保存</button>
+        </form>
+
+        <a href="{{ url_for('index') }}" class="button">一覧に戻る</a>
+    </div>
+</body>
+</html>

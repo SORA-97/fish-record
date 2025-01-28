@@ -59,6 +59,23 @@ textarea {
   font-weight: bold;
 }
 
+.select {
+    font-size: 18px;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
 .card {
     padding: 16px;
     background-color: #e9ecef;
@@ -77,6 +94,7 @@ textarea {
     opacity: 0.8;
 }
 
+/* モダンスタイル */
 .modern-form {
     margin: 0 auto;
     padding: 20px;
@@ -98,7 +116,7 @@ textarea {
     min-height: 100px;
 }
 
-.modern-form input[type="text"],
+.modern-form input,
 .modern-form textarea {
     width: 100%;
     padding: 10px;
@@ -112,7 +130,7 @@ textarea {
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.modern-form input[type="text"]:focus,
+.modern-form input:focus,
 .modern-form textarea:focus {
     border-color: #007aff;
     box-shadow: 0 0 5px rgba(0, 122, 255, 0.5);
@@ -139,4 +157,39 @@ textarea {
 
 .modern-form button:active {
     background-color: #003e8f;
+}
+
+/* ヘッダ */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0 20px;
+    color: #fff;
+    height: 60px;
+}
+  
+.header-title {
+    border-bottom: 2px solid #333333bd;
+}
+
+.account-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.spacer {
+    flex: 1;
 }

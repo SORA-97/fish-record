@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>魚の記録帳 - {{ record.fish_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_record.css') }}">
+</head>
+<body>
+    <div id="view_record" class="container">
+        <h1 class="title-border">{{ record.fish_name }}</h1>
+
+        <div class="contents">
+            <p>{{ record.memo }}</p>
+            <p class="small">作成日: {{ record.created_at.strftime('%Y年 %m月 %d日 %H:%M') }}</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('delete_record', record_id=record.record_id) }}">
+            <button type="submit" class="delete button">メモを削除</button>
+        </form>
+
+        <a href="{{ url_for('index') }}" class="button">メモ一覧に戻る</a>
+    </div>
+</body>
+</html>

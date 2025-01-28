@@ -1,0 +1,19 @@
+#log_in {
+    .button {
+        margin: 20px 0;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 24px;
+        font-size: 56px;
+    }
+
+    .sub_title {
+        text-align: center;
+    }
+    
+    .heading {
+        margin-bottom: 24px;
+    }
+}

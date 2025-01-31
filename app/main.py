@@ -81,10 +81,15 @@ def delete_record(record_id):
     db.session.commit()
     return redirect(url_for('index'))
 
-# 新しいメモの作成フォームを表示
+# アカウントページを表示
 @app.route('/account', methods=['GET'])
 def account():
     return render_template('account.html')
+
+# ログイン画面を表示（最初の画面にするべき）
+@app.route('/log_in', methods=['GET'])
+def log_in():
+    return render_template('log_in.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

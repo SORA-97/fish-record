@@ -92,7 +92,7 @@ def log_in():
     return render_template('log_in.html')
 
 # サンプルのユーザー情報
-users = {
+dummy_users = {
     "user10": "password10",
     "user20": "password20"
 }
@@ -104,11 +104,11 @@ def register():
         password = request.form['password']
 
         # ユーザーが既に存在しないかチェック
-        if username in users:
+        if username in dummy_users:
             return render_template('log_in.html', register_error_message="このユーザ名は既に使用されています。")
 
         # 新しいユーザーを登録
-        users[username] = password
+        dummy_users[username] = password
         return render_template('index.html', welcome_message="会員登録されました。")
 
 @app.route('/login', methods=['POST'])
@@ -117,7 +117,7 @@ def login():
     password = request.form['password']
 
     # ユーザー認証
-    if username in users and users[username] == password:
+    if username in dummy_users and dummy_users[username] == password:
         return render_template('index.html', welcome_message=f"ようこそ、 {username} さん。")
     else:
         return render_template('log_in.html', login_error_message="ログインに失敗しました。ユーザ名とパスワードをお確かめください。")

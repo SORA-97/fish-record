@@ -91,5 +91,36 @@ def account():
 def log_in():
     return render_template('log_in.html')
 
+# サンプルのユーザー情報
+users = {
+    "user10": "password10",
+    "user20": "password20"
+}
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        # ユーザーが既に存在しないかチェック
+        if username in users:
+            return render_template('log_in.html', register_error_message="このユーザ名は既に使用されています。")
+
+        # 新しいユーザーを登録
+        users[username] = password
+        return render_template('index.html', welcome_message="会員登録されました。")
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+
+    # ユーザー認証
+    if username in users and users[username] == password:
+        return render_template('index.html', welcome_message=f"ようこそ、 {username} さん。")
+    else:
+        return render_template('log_in.html', login_error_message="ログインに失敗しました。ユーザ名とパスワードをお確かめください。")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

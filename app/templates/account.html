@@ -4,18 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>アカウント設定</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/account.css') }}">
 </head>
 <body>
     <div id="account" class="container">
-        <div class="header-container">
-            <h1 class="title-border">魚の記録帳</h1>
-            <a href="{{ url_for('account') }}">
-                <i class="fa-solid fa-fish"></i>
-            </a>
-        </div>
+        <h1 class="title-border">アカウント</h1>
 
         <a href="{{ url_for('index') }}" class="button">ホームに戻る</a>
 
@@ -32,14 +26,15 @@
             </div>
         </form>
 
-        <form action="{{ url_for('index') }}" method="POST">
-            <button type="submit" class="button">ログアウト</button>
-        </form>
-
-        <form action="{{ url_for('index') }}" method="POST">
-            <button type="submit" class="delete button">アカウントを削除</button>
-        </form>
-
+        <div class="log-out-container">
+            <a href="{{ url_for('log_in') }}" method="POST">
+                <button type="submit" class="button">ログアウト</button>
+            </a>
+    
+            <a href="{{ url_for('log_in') }}" method="POST">
+                <button type="submit" class="delete button">アカウントを削除</button>
+            </a>
+        </div>
     </div>
 </body>
 </html>

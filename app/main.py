@@ -68,7 +68,7 @@ def show_create_record():
 # 新しいメモを作成
 @app.route('/create', methods=['POST'])
 def create_record():
-    user_id = 1
+    user_id = session['user_id']
     fish_name = request.form['fish_name']
     length = request.form['length']
     location = request.form['location']

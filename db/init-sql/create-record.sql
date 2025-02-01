@@ -35,3 +35,7 @@ INSERT INTO fish_records (user_id, photo, fish_name, length, location, date, mem
 (2, NULL, 'サメ', 40.0, '北海道', '2021-01-04', 'メモ4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (3, NULL, 'ながぐつ', 70.0, '北海道', '2021-01-05', 'メモ5', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (3, NULL, 'タイヤ', 50.0, '北海道', '2021-01-06', 'メモ6', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+UPDATE users SET password = 'scrypt:32768:8:1$TB4EdHmyhKDTEXDv$121dace93d5193d1e7ea38bd82e17ad2768a2a3240e0f0c1c0fcc383a099c27ce0ebfe7901548911f3d3de91fc628b135a6862ca742c572db5cad8c8fae38dda' WHERE user_name = 'user1';
+UPDATE users SET password = 'scrypt:32768:8:1$pZbQur0NFnAHY8bv$03a037c02f5e19384a5b0bedd72ebab5d8f33807ef1cccfccd7d46d1c3d201eb24efab9df90b358ccb8b9a93034142a9c41bd331e0f0710bf221330b9d0be262' WHERE user_name = 'user2';
+UPDATE users SET password = 'scrypt:32768:8:1$FEOjOC8SXz8ZTChX$21d982dbc724b69141194fb88515b75e4357a0becc2025b97713f0d4c4a6715241e6d45c8d4ab1f55f2aaf79a875364fc816c774f62c95775e16e2583ae6d495' WHERE user_name = 'user3';

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for
-from app.models import db, fish_records, user
+from werkzeug.security import generate_password_hash, check_password_hash
+from app.models import db, fish_records, User
 from dotenv import load_dotenv
 import os
 from uuid import UUID
@@ -91,24 +92,23 @@ def account():
 def log_in():
     return render_template('log_in.html')
 
-# サンプルのユーザー情報
-dummy_users = {
-    "user10": "password10",
-    "user20": "password20"
-}
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-        # ユーザーが既に存在しないかチェック
-        if username in dummy_users:
+        # 既にユーザー名が存在するか確認
+        existing_user = User.query.filter_by(user_name=username).first()
+        if existing_user:
             return render_template('log_in.html', register_error_message="このユーザ名は既に使用されています。")
 
-        # 新しいユーザーを登録
-        dummy_users[username] = password
+        # パスワードをハッシュ化してDBに保存
+        hashed_password = generate_password_hash(password)
+        new_user = User(user_name=username, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+
         return render_template('index.html', welcome_message="会員登録されました。")
 
 @app.route('/login', methods=['POST'])
@@ -116,11 +116,14 @@ def login():
     username = request.form['username']
     password = request.form['password']
 
-    # ユーザー認証
-    if username in dummy_users and dummy_users[username] == password:
+    # ユーザー検索
+    user = User.query.filter_by(user_name=username).first()
+    if user and check_password_hash(user.password, password):
         return render_template('index.html', welcome_message=f"ようこそ、 {username} さん。")
+    if user:
+        return render_template('log_in.html', login_error_message="パスワードが違います。")
     else:
-        return render_template('log_in.html', login_error_message="ログインに失敗しました。ユーザ名とパスワードをお確かめください。")
+        return render_template('log_in.html', login_error_message="このユーザ名は存在しません。")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

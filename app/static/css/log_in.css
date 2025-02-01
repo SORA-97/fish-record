@@ -9,11 +9,15 @@
         font-size: 56px;
     }
 
-    .sub_title {
+    .sub-title {
         text-align: center;
     }
     
     .heading {
         margin-bottom: 24px;
+    }
+
+    .error-message {
+        color: red;
     }
 }

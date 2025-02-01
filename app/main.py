@@ -114,6 +114,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
+        session['user_id'] = new_user.user_id  # ユーザーIDをセッションに保存
         return render_template('index.html', welcome_message="会員登録されました。")
 
 @app.route('/login', methods=['GET', 'POST'])

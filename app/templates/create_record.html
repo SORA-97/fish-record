@@ -11,7 +11,10 @@
     <div id="create_record" class="container">
         <h1 class="title-border">記録 - 新規作成</h1>
 
-        <form action="{{ url_for('create_record') }}" method="POST" class="modern-form">
+        <form action="{{ url_for('create_record') }}" method="POST" class="modern-form" enctype="multipart/form-data">
+            <label for="photo">画像</label>
+            <input type="file" id="photo" name="photo">
+
             <label for="fish_name">魚の種類</label>
             <input type="text" id="fish_name" name="fish_name" required>
 

@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import db, fish_records, User
 from dotenv import load_dotenv
 import os
+from werkzeug.utils import secure_filename
 from uuid import UUID
 
 # .envファイルを読み込む
@@ -76,12 +77,23 @@ def create_record():
     if 'user_id' not in session:
         return redirect('/')
     user_id = session['user_id']
+    photo = request.files['photo']
+    if photo:
+        filename = secure_filename(photo.filename)
+        upload_folder = './static/uploads'
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+        photo_path = filename
+        photo.save(upload_folder + '/' + photo_path)
+    else:
+        photo_path = None
+    
     fish_name = request.form['fish_name']
     length = request.form['length']
     location = request.form['location']
     date = request.form['date']
     memo = request.form['memo']
-    new_record = fish_records(fish_name=fish_name, user_id=user_id, length=length, location=location, date=date, memo=memo)
+    new_record = fish_records(fish_name=fish_name, user_id=user_id, length=length, location=location, date=date, memo=memo, photo_path=photo_path)
     db.session.add(new_record)
     db.session.commit()
     return redirect(url_for('index'))

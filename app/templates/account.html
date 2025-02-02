@@ -16,7 +16,7 @@
         <form action="/change_password" method="POST" class="modern-form">
             <h2>ユーザ名</h2>
             <h3 class="contents">{{ user.user_name }}</h1>
-            <!-- フラッシュメッセージ -->
+            
             {% with messages = get_flashed_messages(with_categories=True) %}
                 {% if messages %}
                     {% for category, message in messages %}

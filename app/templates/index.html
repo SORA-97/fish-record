@@ -10,7 +10,14 @@
 </head>
 <body>
     <div id="index" class="container">
-        <h4>{{ welcome_message }}</h4>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
         <header>
             <h1 class="header-title">魚の記録帳</h1>
             <a href="{{ url_for('account') }}" class="account-icon">B</a>

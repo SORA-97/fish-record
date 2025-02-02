@@ -16,7 +16,7 @@ POSTGRES_HOST = os.getenv('POSTGRES_HOST')
 POSTGRES_PORT = os.getenv('POSTGRES_PORT')
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # セッション管理のためのキー
+app.secret_key = 'your_secret_key'
 
 # SQLAlchemy設定
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
@@ -36,11 +36,10 @@ details = {
 }
 
 # メモ一覧を表示
-@app.route('/')
+@app.route('/home')
 def index():
     if 'user_id' not in session:
-        return redirect('/login')  # ログインしていない場合はログインページへ
-    
+        return redirect('/')
     user_id = session['user_id']
     records = fish_records.query.filter_by(user_id=user_id).order_by(fish_records.created_at.desc()).all()
     return render_template('index.html', records=records)
@@ -49,7 +48,7 @@ def index():
 @app.route('/get_details', methods=['POST'])
 def get_details():
     if 'user_id' not in session:
-        return redirect('/login')
+        return redirect('/')
     data = request.json
     detail = data.get("option", "")
     if detail in details:
@@ -60,7 +59,7 @@ def get_details():
 @app.route('/record/<record_id>')
 def view_record(record_id):
     if 'user_id' not in session:
-        return redirect('/login')
+        return redirect('/')
     record = fish_records.query.get_or_404(str(record_id))
     return render_template('view_record.html', record=record)
 
@@ -68,14 +67,14 @@ def view_record(record_id):
 @app.route('/create', methods=['GET'])
 def show_create_record():
     if 'user_id' not in session:
-        return redirect('/login')
+        return redirect('/')
     return render_template('create_record.html')
 
 # 新しいメモを作成
 @app.route('/create', methods=['POST'])
 def create_record():
     if 'user_id' not in session:
-        return redirect('/login')
+        return redirect('/')
     user_id = session['user_id']
     fish_name = request.form['fish_name']
     length = request.form['length']
@@ -91,7 +90,7 @@ def create_record():
 @app.route('/record/<record_id>/delete', methods=['POST'])
 def delete_record(record_id):
     if 'user_id' not in session:
-        return redirect('/login')
+        return redirect('/')
     record = fish_records.query.get_or_404(str(record_id))
     db.session.delete(record)
     db.session.commit()
@@ -100,100 +99,82 @@ def delete_record(record_id):
 @app.route('/account', methods=['GET'])
 def account():
     if 'user_id' not in session:
-        return redirect('/login')
-
+        return redirect('/')
     user = User.query.get(session['user_id'])
     return render_template('account.html', user=user)
 
 @app.route('/change_password', methods=['POST'])
 def change_password():
     if 'user_id' not in session:
-        return redirect('/login')
-
+        return redirect('/')
     user = User.query.get(session['user_id'])
     current_password = request.form['current_password']
     new_password = request.form['new_password']
-
-    # 現在のパスワードを確認
     if not check_password_hash(user.password, current_password):
         flash("現在のパスワードが違います。", "error")
         return redirect('/account')
-
-    # パスワードをハッシュ化して更新
     user.password = generate_password_hash(new_password)
     db.session.commit()
-
     flash("パスワードを変更しました。", "success")
     return redirect('/account')
 
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)  # セッションからユーザーIDを削除
-    return redirect('/login')
+    session.pop('user_id', None)
+    return redirect('/')
 
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
     if 'user_id' not in session:
-        return redirect('/login')
-
+        return redirect('/')
     user_id = session['user_id']
-    
-    # ① ユーザーの魚記録を削除
     fish_records.query.filter_by(user_id=user_id).delete()
-
-    # ② ユーザーアカウントを削除
     user = User.query.get(user_id)
     if user:
         db.session.delete(user)
         db.session.commit()
-
-    # ③ セッションをクリア
     session.pop('user_id', None)
-    
-    return redirect('/login')
+    return redirect('/')
 
-# ログイン画面を表示（最初の画面にするべき）
-@app.route('/log_in', methods=['GET'])
-def log_in():
-    return render_template('log_in.html')
+# ログイン画面を表示
+@app.route('/', methods=['GET'])
+def authentication():
+    return render_template('authentication.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
-        # 既にユーザー名が存在するか確認
         existing_user = User.query.filter_by(user_name=username).first()
         if existing_user:
-            return render_template('log_in.html', register_error_message="このユーザ名は既に使用されています。")
-
-        # パスワードをハッシュ化してDBに保存
+            flash("このユーザ名は既に使用されています。", ("register", "error"))
+            return redirect('/')
         hashed_password = generate_password_hash(password)
         new_user = User(user_name=username, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-
-        session['user_id'] = new_user.user_id  # ユーザーIDをセッションに保存
-        return render_template('index.html', welcome_message="会員登録されました。")
+        session['user_id'] = new_user.user_id
+        flash("会員登録されました。", "success")
+    return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
-        # ユーザー検索
         user = User.query.filter_by(user_name=username).first()
         if user and check_password_hash(user.password, password):
-            session['user_id'] = user.user_id  # ユーザーIDをセッションに保存
-            return redirect('/')  # ログイン成功後、トップページへリダイレクト
+            session['user_id'] = user.user_id
+            flash("ログインしました", "success")
+            return redirect(url_for('index'))
         if user:
-            return render_template('log_in.html', login_error_message="パスワードが違います。")
+            flash("パスワードが違います。", ("login", "error"))
+            return redirect('/')
         else:
-            return render_template('log_in.html', login_error_message="このユーザ名は存在しません。")
-
-    return render_template('log_in.html')
+            flash("このユーザ名は存在しません。", ("login", "error"))
+            return redirect('/')
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import db, fish_records, User
 from dotenv import load_dotenv
@@ -16,6 +16,7 @@ POSTGRES_HOST = os.getenv('POSTGRES_HOST')
 POSTGRES_PORT = os.getenv('POSTGRES_PORT')
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # セッション管理のためのキー
 
 # SQLAlchemy設定
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
@@ -37,7 +38,11 @@ details = {
 # メモ一覧を表示
 @app.route('/')
 def index():
-    records = fish_records.query.order_by(fish_records.created_at.desc()).all()
+    if 'user_id' not in session:
+        return redirect('/login')  # ログインしていない場合はログインページへ
+    
+    user_id = session['user_id']
+    records = fish_records.query.filter_by(user_id=user_id).order_by(fish_records.created_at.desc()).all()
     return render_template('index.html', records=records)
 
 # メモ一覧を絞り込み
@@ -63,7 +68,7 @@ def show_create_record():
 # 新しいメモを作成
 @app.route('/create', methods=['POST'])
 def create_record():
-    user_id = 1
+    user_id = session['user_id']
     fish_name = request.form['fish_name']
     length = request.form['length']
     location = request.form['location']
@@ -109,21 +114,26 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
+        session['user_id'] = new_user.user_id  # ユーザーIDをセッションに保存
         return render_template('index.html', welcome_message="会員登録されました。")
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    username = request.form['username']
-    password = request.form['password']
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
 
-    # ユーザー検索
-    user = User.query.filter_by(user_name=username).first()
-    if user and check_password_hash(user.password, password):
-        return render_template('index.html', welcome_message=f"ようこそ、 {username} さん。")
-    if user:
-        return render_template('log_in.html', login_error_message="パスワードが違います。")
-    else:
-        return render_template('log_in.html', login_error_message="このユーザ名は存在しません。")
+        # ユーザー検索
+        user = User.query.filter_by(user_name=username).first()
+        if user and check_password_hash(user.password, password):
+            session['user_id'] = user.user_id  # ユーザーIDをセッションに保存
+            return redirect('/')  # ログイン成功後、トップページへリダイレクト
+        if user:
+            return render_template('log_in.html', login_error_message="パスワードが違います。")
+        else:
+            return render_template('log_in.html', login_error_message="このユーザ名は存在しません。")
+
+    return render_template('log_in.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

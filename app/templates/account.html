@@ -13,9 +13,17 @@
 
         <a href="{{ url_for('index') }}" class="button">ホームに戻る</a>
 
-        <form action="{{ url_for('account') }}" method="POST"class="modern-form">
+        <form action="/change_password" method="POST" class="modern-form">
             <h2>ユーザ名</h2>
-            <h3 class="contents">ああああ</h1>
+            <h3 class="contents">{{ user.user_name }}</h1>
+            <!-- フラッシュメッセージ -->
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
             <h2>パスワードを変更する</h2>
             <div class="contents">
                 <label for="current_password">現在のパスワード</label>
@@ -27,13 +35,13 @@
         </form>
 
         <div class="log-out-container">
-            <a href="{{ url_for('log_in') }}" method="POST">
+            <form action="/logout" method="GET">
                 <button type="submit" class="button">ログアウト</button>
-            </a>
+            </form>
     
-            <a href="{{ url_for('log_in') }}" method="POST">
+            <form action="/delete_account" method="POST" onsubmit="return confirm('本当にアカウントを削除しますか？');">
                 <button type="submit" class="delete button">アカウントを削除</button>
-            </a>
+            </form>
         </div>
     </div>
 </body>

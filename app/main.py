@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for, session
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import db, fish_records, User
 from dotenv import load_dotenv
@@ -48,6 +48,8 @@ def index():
 # メモ一覧を絞り込み
 @app.route('/get_details', methods=['POST'])
 def get_details():
+    if 'user_id' not in session:
+        return redirect('/login')
     data = request.json
     detail = data.get("option", "")
     if detail in details:
@@ -57,17 +59,23 @@ def get_details():
 # メモの詳細を表示
 @app.route('/record/<record_id>')
 def view_record(record_id):
+    if 'user_id' not in session:
+        return redirect('/login')
     record = fish_records.query.get_or_404(str(record_id))
     return render_template('view_record.html', record=record)
 
 # 新しいメモの作成フォームを表示
 @app.route('/create', methods=['GET'])
 def show_create_record():
+    if 'user_id' not in session:
+        return redirect('/login')
     return render_template('create_record.html')
 
 # 新しいメモを作成
 @app.route('/create', methods=['POST'])
 def create_record():
+    if 'user_id' not in session:
+        return redirect('/login')
     user_id = session['user_id']
     fish_name = request.form['fish_name']
     length = request.form['length']
@@ -82,15 +90,67 @@ def create_record():
 # メモを削除
 @app.route('/record/<record_id>/delete', methods=['POST'])
 def delete_record(record_id):
+    if 'user_id' not in session:
+        return redirect('/login')
     record = fish_records.query.get_or_404(str(record_id))
     db.session.delete(record)
     db.session.commit()
     return redirect(url_for('index'))
 
-# アカウントページを表示
 @app.route('/account', methods=['GET'])
 def account():
-    return render_template('account.html')
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    user = User.query.get(session['user_id'])
+    return render_template('account.html', user=user)
+
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    user = User.query.get(session['user_id'])
+    current_password = request.form['current_password']
+    new_password = request.form['new_password']
+
+    # 現在のパスワードを確認
+    if not check_password_hash(user.password, current_password):
+        flash("現在のパスワードが違います。", "error")
+        return redirect('/account')
+
+    # パスワードをハッシュ化して更新
+    user.password = generate_password_hash(new_password)
+    db.session.commit()
+
+    flash("パスワードを変更しました。", "success")
+    return redirect('/account')
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)  # セッションからユーザーIDを削除
+    return redirect('/login')
+
+@app.route('/delete_account', methods=['POST'])
+def delete_account():
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    user_id = session['user_id']
+    
+    # ① ユーザーの魚記録を削除
+    fish_records.query.filter_by(user_id=user_id).delete()
+
+    # ② ユーザーアカウントを削除
+    user = User.query.get(user_id)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+
+    # ③ セッションをクリア
+    session.pop('user_id', None)
+    
+    return redirect('/login')
 
 # ログイン画面を表示（最初の画面にするべき）
 @app.route('/log_in', methods=['GET'])

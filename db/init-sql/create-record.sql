@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS fish_records (
     record_id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(user_id),
-    photo BYTEA,
+    photo_path TEXT,
     fish_name TEXT,
     length REAL CHECK (length > 0),
     location TEXT,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS fish_records (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    CHECK (photo IS NOT NULL OR fish_name IS NOT NULL)
+    CHECK (photo_path IS NOT NULL OR fish_name IS NOT NULL)
 );
 
 -- ダミーデータ挿入
@@ -28,7 +28,7 @@ INSERT INTO users (user_name, password) VALUES
 ('user2', 'password2'),
 ('user3', 'password3');
 
-INSERT INTO fish_records (user_id, photo, fish_name, length, location, date, memo, created_at, updated_at) VALUES
+INSERT INTO fish_records (user_id, photo_path, fish_name, length, location, date, memo, created_at, updated_at) VALUES
 (1, NULL, 'サクラマス', 50.0, '北海道', '2021-01-01', 'メモ1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (1, NULL, 'ニジマス', 30.0, '北海道', '2021-01-02', 'メモ2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (2, NULL, 'マンボウ', 60.0, '北海道', '2021-01-03', 'メモ3', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

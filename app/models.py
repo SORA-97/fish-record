@@ -15,7 +15,7 @@ class User(db.Model):  # クラス名を適切なものに修正
 class fish_records(db.Model):
     record_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
-    photo = db.Column(db.LargeBinary)
+    photo_path = db.Column(db.String(255))
     fish_name = db.Column(db.String(255))
     length = db.Column(db.Float)
     location = db.Column(db.String(255))

@@ -1,10 +1,11 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import db, fish_records, User
+from app.models import db, FishRecord, User
 from dotenv import load_dotenv
 import os
 from werkzeug.utils import secure_filename
 import uuid
+from datetime import date
 
 # .envファイルを読み込む
 load_dotenv()
@@ -23,8 +24,15 @@ app.secret_key = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+upload_folder = './static/uploads'
+if not os.path.exists(upload_folder):
+    os.makedirs(upload_folder)
+
+default_photo_path = 'default.jpg'
+
 db.init_app(app)
 
+# テーブルが存在しない場合にテーブルを作成
 @app.before_request
 def create_tables():
     db.create_all()
@@ -42,10 +50,13 @@ def index():
     if 'user_id' not in session:
         return redirect('/')
     user_id = session['user_id']
-    records = fish_records.query.filter_by(user_id=user_id).order_by(fish_records.created_at.desc()).all()
+    records = FishRecord.query.filter_by(user_id=user_id).order_by(
+        FishRecord.created_at.desc(),
+        FishRecord.record_id.desc()
+    ).all()
     return render_template('index.html', records=records)
 
-# メモ一覧を絞り込み
+# メモ一覧を絞り込むための選択肢を取得
 @app.route('/get_details', methods=['POST'])
 def get_details():
     if 'user_id' not in session:
@@ -61,7 +72,7 @@ def get_details():
 def view_record(record_id):
     if 'user_id' not in session:
         return redirect('/')
-    record = fish_records.query.get_or_404(str(record_id))
+    record = FishRecord.query.get_or_404(str(record_id))
     return render_template('view_record.html', record=record)
 
 # 新しいメモの作成フォームを表示
@@ -76,25 +87,33 @@ def show_create_record():
 def create_record():
     if 'user_id' not in session:
         return redirect('/')
-    user_id = session['user_id']
-    photo = request.files['photo']
-    if photo:
-        filename = secure_filename(photo.filename)
+    new_user_id = session['user_id']
+
+    new_photo = request.files['photo']
+    if new_photo:
+        filename = secure_filename(new_photo.filename)
         unique_filename = str(uuid.uuid4()) + "_" + filename
-        upload_folder = './static/uploads'
-        if not os.path.exists(upload_folder):
-            os.makedirs(upload_folder)
-        photo_path = unique_filename
-        photo.save(upload_folder + '/' + photo_path)
+        new_photo_path = unique_filename
+        new_photo.save(upload_folder + '/' + new_photo_path)
     else:
-        photo_path = None
+        new_photo_path = default_photo_path
     
-    fish_name = request.form['fish_name']
-    length = request.form['length']
-    location = request.form['location']
-    date = request.form['date']
-    memo = request.form['memo']
-    new_record = fish_records(fish_name=fish_name, user_id=user_id, length=length, location=location, date=date, memo=memo, photo_path=photo_path)
+    new_fish_name = request.form['fish_name'] or '無銘の魚'
+    new_length = request.form['length'] or 999999
+    new_location = request.form['location'] or 'NoData'
+    new_date = request.form['date'] or date(1, 1, 1)
+    new_memo = request.form['memo'] or 'NoData'
+
+    new_record = FishRecord(
+        user_id=new_user_id,
+        photo_path=new_photo_path,
+        fish_name=new_fish_name,
+        length=new_length,
+        location=new_location,
+        date=new_date,
+        memo=new_memo
+    )
+
     db.session.add(new_record)
     db.session.commit()
     return redirect(url_for('index'))
@@ -104,11 +123,12 @@ def create_record():
 def delete_record(record_id):
     if 'user_id' not in session:
         return redirect('/')
-    record = fish_records.query.get_or_404(str(record_id))
+    record = FishRecord.query.get_or_404(str(record_id))
     db.session.delete(record)
     db.session.commit()
     return redirect(url_for('index'))
 
+# アカウント情報を表示
 @app.route('/account', methods=['GET'])
 def account():
     if 'user_id' not in session:
@@ -116,6 +136,7 @@ def account():
     user = User.query.get(session['user_id'])
     return render_template('account.html', user=user)
 
+# パスワードを変更
 @app.route('/change_password', methods=['POST'])
 def change_password():
     if 'user_id' not in session:
@@ -131,17 +152,19 @@ def change_password():
     flash("パスワードを変更しました。", "success")
     return redirect('/account')
 
+# ログアウト
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
     return redirect('/')
 
+# アカウントを削除
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
     if 'user_id' not in session:
         return redirect('/')
     user_id = session['user_id']
-    fish_records.query.filter_by(user_id=user_id).delete()
+    FishRecord.query.filter_by(user_id=user_id).delete()
     user = User.query.get(user_id)
     if user:
         db.session.delete(user)
@@ -154,6 +177,7 @@ def delete_account():
 def authentication():
     return render_template('authentication.html')
 
+# 新規アカウント登録
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -171,6 +195,7 @@ def register():
         flash("会員登録されました。", "success")
     return redirect(url_for('index'))
 
+# ログイン
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

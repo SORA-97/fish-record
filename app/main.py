@@ -4,7 +4,7 @@ from app.models import db, fish_records, User
 from dotenv import load_dotenv
 import os
 from werkzeug.utils import secure_filename
-from uuid import UUID
+import uuid
 
 # .envファイルを読み込む
 load_dotenv()
@@ -80,10 +80,11 @@ def create_record():
     photo = request.files['photo']
     if photo:
         filename = secure_filename(photo.filename)
+        unique_filename = str(uuid.uuid4()) + "_" + filename
         upload_folder = './static/uploads'
         if not os.path.exists(upload_folder):
             os.makedirs(upload_folder)
-        photo_path = filename
+        photo_path = unique_filename
         photo.save(upload_folder + '/' + photo_path)
     else:
         photo_path = None

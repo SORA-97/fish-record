@@ -5,15 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>魚の記録帳</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/log_in.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/authentication.css') }}">
 </head>
 <body>
-    <div id="log_in" class="container">
+    <div id="authentication" class="container">
         <h3 class="sub-title">あなただけの魚図鑑を作ろう</h3>
         <h1 class="title">魚の記録帳</h1>
 
         <form action="{{ url_for('register') }}" method="POST" class="modern-form">
-            <h4 class="error-message">{{ register_error_message }}</h4>
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for (category, status), message in messages %}
+                        {% if category == "register" %}
+                            <div class="flash-message {{ status }}">{{ message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
             <h2 class="heading">新規会員登録してはじめる</h2>  
             <label for="username">ユーザ名</label>
             <input type="text" id="username" name="username" required>
@@ -21,7 +30,18 @@
             <input type="password" id="password" name="password" required>
             <button type="submit" class="button">会員登録</button>
         </form>
-        <form action="{{ url_for('login') }}" method="POST" class="modern-form"> 
+
+        <form action="{{ url_for('login') }}" method="POST" class="modern-form">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for (category, status), message in messages %}
+                        {% if category == "login" %}
+                            <div class="flash-message {{ status }}">{{ message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
             <h4 class="error-message">{{ login_error_message }}</h4>
             <h2 class="heading">ログインはこちら</h2>  
             <label for="username">ユーザ名</label>
@@ -30,6 +50,7 @@
             <input type="password" id="password" name="password" required>
             <button type="submit" class="button">ログイン</button>
         </form>
+        
     </div>
 </body>
 </html>

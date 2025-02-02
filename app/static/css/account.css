@@ -17,7 +17,7 @@
     }
 
     .fa-solid {
-        border: 2px solid #333; /* 枠線 */
+        border: 2px solid #333;
     }
 
     .log-out-container {
@@ -25,23 +25,5 @@
         gap: 24px;
         margin-bottom: 24px;
         justify-content: center;
-    }
-
-    .flash-message {
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 5px;
-    }
-
-    .success {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-    }
-    
-    .error {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
     }
 }

@@ -19,7 +19,8 @@
 
         <div class="contents">
             {% if record.photo_path %}
-                <img src="{{ url_for('static', filename='uploads/' + record.photo_path) }}" alt="{{ record.fish_name if record.fish_name else '魚の写真' }}">
+                <img src="{{ url_for('static', filename='uploads/' + record.photo_path) }}"
+                alt="{{ record.fish_name if record.fish_name else '魚の写真' }}">
             {% else %}
                 <img src="{{ url_for('static', filename='default.jpg') }}" alt="魚の写真">
             {% endif %}

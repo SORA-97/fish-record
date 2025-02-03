@@ -13,7 +13,7 @@
             記録 - {{ record.fish_name }}
         </h1>
 
-        <div style="display: flex;">
+        <div style="display: flex; gap: 10px;">
             <a href="{{ url_for('index') }}" class="button">メモ一覧に戻る</a>
 
             <a href="{{ url_for('edit_record', record_id=record.record_id) }}" class="button">メモを編集</a>

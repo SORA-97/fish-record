@@ -25,6 +25,11 @@ textarea {
     background: transparent;
 }
 
+input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
 /* common css */
 .container {
     margin: 40px auto;

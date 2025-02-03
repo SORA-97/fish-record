@@ -1,25 +1,30 @@
 import uuid
 from flask_sqlalchemy import SQLAlchemy
+from datetime import date
 
 db = SQLAlchemy()
 
-class User(db.Model):  # クラス名を適切なものに修正
-    __tablename__ = 'users'  # テーブル名を明示
+class User(db.Model):
+    __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
-
-class fish_records(db.Model):
+class FishRecord(db.Model):
+    __tablename__ = 'fish_records'
     record_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
-    photo_path = db.Column(db.String(255))
-    fish_name = db.Column(db.String(255))
-    length = db.Column(db.Float)
-    location = db.Column(db.String(255))
-    date = db.Column(db.Date)
-    memo = db.Column(db.String(255))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    photo_path = db.Column(db.String(255), nullable=False, default='default.jpg')
+    fish_name = db.Column(db.String(255), nullable=False, default='無銘の魚')
+    length = db.Column(db.Float, nullable=False, default=999999)
+    location = db.Column(db.String(255), nullable=False, default='NoData')
+    date = db.Column(db.Date, nullable=False, default=date(1, 1, 1))
+    memo = db.Column(db.String(255), nullable=False, default='NoData')
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+
+    __table_args__ = (
+        db.CheckConstraint('length > 0', name='check_length_positive'),
+    )

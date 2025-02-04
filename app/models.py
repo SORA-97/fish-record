@@ -28,3 +28,6 @@ class FishRecord(db.Model):
     __table_args__ = (
         db.CheckConstraint('length > 0', name='check_length_positive'),
     )
+
+    def is_default_date(self):
+        return self.date == date(1, 1, 1)

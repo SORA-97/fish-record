@@ -13,9 +13,17 @@
 
         <form action="{{ url_for('edit_record', record_id=record.record_id) }}" method="POST" class="modern-form" enctype="multipart/form-data">
             <label for="photo">画像</label>
-            <input type="file" id="photo" name="photo">
+            <img id="photo-preview"
+            {% if record.photo_path != 'default.jpg' %}
+            src="{{ url_for('static', filename='uploads/' + record.photo_path) }}"
+            {% else %}
+            src="#"
+            {% endif %}
+            alt="写真プレビュー" class="photo-preview" style="margin-bottom: 10px;">
+            <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
+            <input type="file" id="photo" name="photo" onchange="previewImage(event)">
 
-            <label for="fish_name">魚の種類</label>
+            <label for="fish_name">名称</label>
             <input type="text" id="fish_name" name="fish_name" value="{{ record.fish_name }}" placeholder="例: サケ" required>
 
             <label for="location">場所</label>
@@ -36,8 +44,8 @@
                 </div>
                 <div style="flex: 1 1 calc(50% - 10px);">
                     <label for="date">日付</label>
-                    <input type="date" id="date" name="date" value="{{ record.date }}"
-                    {% if record.date != "NoData" %}
+                    <input type="date" id="date" name="date"
+                    {% if not record.is_default_date() %}
                         value="{{ record.date }}"
                     {% endif %}
                     >

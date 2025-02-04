@@ -4,12 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>魚の記録帳 - {{ record.fish_name }} 編集</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_record.css') }}">
 </head>
 <body>
     <div id="edit_record" class="container">
-        <h1 class="title-border">記録 - 編集</h1>
+        <header>
+            <div class="header-container">
+                <a href="{{ url_for('index') }}" class="header-title">魚の記録帳</a>
+                <a href="{{ url_for('account') }}" class="account-icon">B</a>
+            </div>
+        </header>
+
+        <p class="title-border">記録 - 編集</p>
 
         <form action="{{ url_for('edit_record', record_id=record.record_id) }}" method="POST" class="modern-form" enctype="multipart/form-data">
             <label for="photo">画像</label>
@@ -52,15 +60,15 @@
                 </div>
             </div>
             <label for="memo">メモ</label>
-            <textarea id="memo" name="memo">
-                {% if record.memo != "NoData" %}
-                    {{ record.memo }}
-                {% endif %}
-            </textarea>
+            {% if record.memo != "NoData" %}
+            <textarea id="memo" name="memo">{{ record.memo }}</textarea>
+            {% else %}
+            <textarea id="memo" name="memo"></textarea>
+            {% endif %}
             <button type="submit" class="button">記録を更新</button>
         </form>
 
-        <a href="{{ url_for('index') }}" class="button">一覧に戻る</a>
+        <a href="{{ url_for('view_record', record_id=record.record_id) }}" class="button">閲覧画面に戻る</a>
     </div>
 </body>
 </html>

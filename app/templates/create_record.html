@@ -13,9 +13,11 @@
 
         <form action="{{ url_for('create_record') }}" method="POST" class="modern-form" enctype="multipart/form-data">
             <label for="photo">画像</label>
-            <input type="file" id="photo" name="photo">
+            <img id="photo-preview" src="#" alt="写真プレビュー" class="photo-preview" style="margin-bottom: 10px;">
+            <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
+            <input type="file" id="photo" name="photo" onchange="previewImage(event)">
 
-            <label for="fish_name">魚の種類</label>
+            <label for="fish_name">名称</label>
             <input type="text" id="fish_name" name="fish_name" placeholder="例: サケ" required>
 
             <label for="location">場所</label>

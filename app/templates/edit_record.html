@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>魚の記録帳 - {{ record.fish_name }} 編集</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_record.css') }}">
+</head>
+<body>
+    <div id="edit_record" class="container">
+        <h1 class="title-border">記録 - 編集</h1>
+
+        <form action="{{ url_for('edit_record', record_id=record.record_id) }}" method="POST" class="modern-form" enctype="multipart/form-data">
+            <label for="photo">画像</label>
+            <img id="photo-preview"
+            {% if record.photo_path != 'default.jpg' %}
+            src="{{ url_for('static', filename='uploads/' + record.photo_path) }}"
+            {% else %}
+            src="#"
+            {% endif %}
+            alt="写真プレビュー" class="photo-preview" style="margin-bottom: 10px;">
+            <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
+            <input type="file" id="photo" name="photo" onchange="previewImage(event)">
+
+            <label for="fish_name">名称</label>
+            <input type="text" id="fish_name" name="fish_name" value="{{ record.fish_name }}" placeholder="例: サケ" required>
+
+            <label for="location">場所</label>
+            <input type="text" id="location" name="location" placeholder="例: 東京湾"
+            {% if record.location != "NoData" %}
+                value="{{ record.location }}"
+            {% endif %}
+            >
+
+            <div style="display: flex; flex-wrap: wrap; column-gap: 10px; row-gap: 10px;">
+                <div style="flex: 1 1 calc(50% - 10px);">
+                    <label for="length">全長(cm)</label>
+                    <input type="number" id="length" name="length" step="0.01" placeholder="例: 50.5"
+                    {% if record.length != 999999 %}
+                        value="{{ record.length }}"
+                    {% endif %}
+                    >
+                </div>
+                <div style="flex: 1 1 calc(50% - 10px);">
+                    <label for="date">日付</label>
+                    <input type="date" id="date" name="date"
+                    {% if not record.is_default_date() %}
+                        value="{{ record.date }}"
+                    {% endif %}
+                    >
+                </div>
+            </div>
+            <label for="memo">メモ</label>
+            <textarea id="memo" name="memo">
+                {% if record.memo != "NoData" %}
+                    {{ record.memo }}
+                {% endif %}
+            </textarea>
+            <button type="submit" class="button">記録を更新</button>
+        </form>
+
+        <a href="{{ url_for('index') }}" class="button">一覧に戻る</a>
+    </div>
+</body>
+</html>

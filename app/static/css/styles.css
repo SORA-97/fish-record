@@ -15,6 +15,22 @@ ul {
     list-style-type: none;
 }
 
+img {
+    width: 100%;
+    max-height: 500px;
+    border-radius: 12px;
+    object-fit: contain;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.photo-preview {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 textarea {
     -webkit-appearance: none;
     -moz-appearance: none;

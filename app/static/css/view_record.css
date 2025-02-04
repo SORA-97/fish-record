@@ -15,12 +15,6 @@
         border-radius: 15px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    
-    .contents img {
-        width: 100%;
-        max-height: 500px;
-        object-fit: contain;
-    }
 
     .small {
         margin-top: 12px;

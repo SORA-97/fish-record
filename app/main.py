@@ -118,6 +118,37 @@ def create_record():
     db.session.commit()
     return redirect(url_for('index'))
 
+# メモの編集フォームを表示
+@app.route('/edit/<record_id>', methods=['GET'])
+def show_edit_record(record_id):
+    if 'user_id' not in session:
+        return redirect('/')
+    record = FishRecord.query.get_or_404(str(record_id))
+    return render_template('edit_record.html', record=record)
+
+# メモを編集
+@app.route('/edit/<record_id>', methods=['POST'])
+def edit_record(record_id):
+    if 'user_id' not in session:
+        return redirect('/')
+    record = FishRecord.query.get_or_404(str(record_id))
+
+    new_photo = request.files['photo']
+    if new_photo:
+        filename = secure_filename(new_photo.filename)
+        new_photo_path = filename
+        new_photo.save(upload_folder + '/' + new_photo_path)
+        record.photo_path = new_photo_path
+    
+    record.fish_name = request.form['fish_name'] or '無銘の魚'
+    record.length = request.form['length'] or 999999
+    record.location = request.form['location'] or 'NoData'
+    record.date = request.form['date'] or date(1, 1, 1)
+    record.memo = request.form['memo'] or 'NoData'
+
+    db.session.commit()
+    return redirect(url_for('index'))
+
 # メモを削除
 @app.route('/record/<record_id>/delete', methods=['POST'])
 def delete_record(record_id):

@@ -57,27 +57,33 @@ input::placeholder {
 }
 
 .button {
-  border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
-  cursor: pointer;
-  display: inline-block;
-  height: 44px;
-  line-height: 44px;
-  outline: 0;
-  overflow: hidden;
-  padding: 0 20px;
-  pointer-events: auto;
-  position: relative;
-  text-align: center;
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-user-select: none;
-  vertical-align: top;
-  white-space: nowrap;
-  width: 200px;
-  z-index: 9;
-  border: 0;
-  font-weight: bold;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+    cursor: pointer;
+    display: inline-block;
+    height: 44px;
+    line-height: 44px;
+    outline: 0;
+    overflow: hidden;
+    padding: 0 20px;
+    pointer-events: auto;
+    position: relative;
+    text-align: center;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    vertical-align: top;
+    white-space: nowrap;
+    width: 200px;
+    z-index: 9;
+    border: 0;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.button:hover {
+    background-color: #e2e2e2;
 }
 
 .select {
@@ -105,8 +111,10 @@ input::placeholder {
 }
 
 .title-border {
+    font-size: 1.5em;
+    font-weight: bold;
     padding-bottom: 4px;
-    margin: 0px 20px 24px 20px;
+    margin: 0px 0px 24px 0px;
     border-bottom: 2px solid #333333bd;
 }
 
@@ -183,16 +191,32 @@ input::placeholder {
 /* ヘッダ */
 header {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
     position: relative;
-    padding: 0 20px;
+    padding: 20px 0;
     color: #fff;
-    height: 60px;
+    height: auto;
+    margin-bottom: 30px;
 }
-  
+
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
 .header-title {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
     border-bottom: 2px solid #333333bd;
+    margin: 0;
+    text-decoration: none;
+    color: inherit;
 }
 
 .account-icon {
@@ -204,15 +228,20 @@ header {
     align-items: center;
     justify-content: center;
     color: #fff;
+    cursor: pointer;
     position: absolute;
     right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
 }
 
-.spacer {
-    flex: 1;
+.button.create {
+    margin-top: 20px;
+    background-color: #00D775;
+    color: #FFF;
+    width: 100%;
+}
+
+.button.create:hover {
+    background-color: #00BD68;
 }
 
 .flash-message {

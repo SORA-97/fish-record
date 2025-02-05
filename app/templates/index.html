@@ -19,13 +19,17 @@
         {% endwith %}
         
         <header>
-            <h1 class="header-title">魚の記録帳</h1>
-            <a href="{{ url_for('account') }}" class="account-icon">B</a>
+            <div class="header-container">
+                <a href="{{ url_for('index') }}" class="header-title">魚の記録帳</a>
+                <a href="{{ url_for('account') }}" class="account-icon">B</a>
+            </div>
+            <a href="{{ url_for('show_create_record') }}" class="button create">
+                <i class="fa-solid fa-fish" style="color: #fff;"></i> 記録する
+            </a>
         </header>
-        <a href="{{ url_for('show_create_record') }}" class="button">
-            <i class="fas fa-pencil-alt"></i> 記録する
-        </a>
         
+        <p class="title-border">魚記録</p>
+
         <div style="display: flex; flex-wrap: wrap; column-gap: 10px; row-gap: 10px;">
             <label style="width: 100%;">絞り込み:</label>
             <select class="select" id="filter" style="flex: 1 1 calc(50% - 10px);">
@@ -55,16 +59,20 @@
         <script src="{{ url_for('static', filename='js/filter.js') }}"></script>
 
         <div class="records" style="margin-top: 24px;">
-            <h2 class="title-border">魚記録</h2>
-
             {% if not records %}
-                <p>まだ記録がありません。</p>
+                <p style="margin: 10px 0;">まだ記録がありません。</p>
+            {% else %}
+                <p style="margin: 10px 0;">総匹数: {{ records|length }} 匹</p>
             {% endif %}
  
             <ul>
                 {% for record in records %}
                 <li class="card">
                     <a href="{{ url_for('view_record', record_id=record.record_id) }}">
+                        {% if record.photo_path != 'default.jpg' %}
+                        <img src="{{ url_for('static', filename='uploads/' + record.photo_path) }}" class="card-photo">
+                        <div class="card-photo-gradient"></div>
+                        {% endif %}
                         <div class="card-title">{{ record.fish_name }}</div>
                         <p class="small">作成日: {{ record.created_at.strftime('%Y年 %m月 %d日 %H:%M') }}</p>
                     </a>

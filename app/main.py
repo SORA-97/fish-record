@@ -110,7 +110,7 @@ def filter_records():
         'record_id': record.record_id,
         'fish_name': record.fish_name,
         'photo_path': record.photo_path,
-        'created_at': record.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        'created_at': format_datetime_jst(record.created_at)
     } for record in records]
 
     response = {

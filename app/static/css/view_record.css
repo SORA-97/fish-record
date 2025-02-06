@@ -20,20 +20,6 @@
     .button {
         width: auto;
         font-size: 20px;
-        background-color: #fdfefe;
-    }
-    
-    .button:hover {
-        background-color: #f0f0f0;
-    }
-
-    .button.delete {
-        color: #FFF;
-        background-color: #ff7260;
-    }
-
-    .button.delete:hover {
-        background-color: rgb(218, 35, 35);
     }
 
     .contents {

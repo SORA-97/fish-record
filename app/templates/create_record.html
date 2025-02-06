@@ -19,13 +19,13 @@
 
         <p class="title-border">記録 - 新規作成</p>
 
-        <form action="{{ url_for('create_record') }}" method="POST" class="modern-form" enctype="multipart/form-data">
-            <label for="photo">画像</label>
+        <form action="{{ url_for('create_record') }}" method="POST" class="modern-form" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <label for="photo">画像（画像か名称は必須です）</label>
             <img id="photo-preview" src="#" alt="写真プレビュー" class="photo-preview" style="margin-bottom: 10px;">
             <input type="file" id="photo" name="photo" onchange="previewImage(event)">
 
-            <label for="fish_name">名称</label>
-            <input type="text" id="fish_name" name="fish_name" placeholder="例: サケ" required>
+            <label for="fish_name">名称（画像か名称は必須です）</label>
+            <input type="text" id="fish_name" name="fish_name" placeholder="例: サケ">
 
             <label for="location">場所</label>
             <input type="text" id="location" name="location" placeholder="例: 東京湾">
@@ -53,5 +53,6 @@
     </div>
     
     <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/validate-form.js') }}"></script>
 </body>
 </html>

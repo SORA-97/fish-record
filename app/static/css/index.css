@@ -9,7 +9,7 @@
         text-align: left;
         position: relative;
         overflow: hidden;
-        background-color: #E9ECEF;
+        background-color: #fdfefe;
     }
     
     .card a {
@@ -41,6 +41,6 @@
         transform: translateY(-50%);
         width: 60px;
         height: 110%;
-        background: linear-gradient(to right, rgba(233, 236, 239, 1) 20%, rgba(233, 236, 239, 0) 100%);
+        background: linear-gradient(to right, #fdfefe 20%, rgba(233, 236, 239, 0) 100%);
     }
 }

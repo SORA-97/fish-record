@@ -1,7 +1,7 @@
 #account {
     .delete {
         color: #FFF;
-        background-color: rgb(255, 80, 80);
+        background-color: #ff7260;
     }
 
     .button {
@@ -16,14 +16,22 @@
         margin-top: 12px;
     }
 
-    .fa-solid {
-        border: 2px solid #333;
-    }
-
     .log-out-container {
         display: flex;
         gap: 24px;
         margin-bottom: 24px;
         justify-content: center;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .button-container > a:first-child {
+        margin-right: auto;
+        width: auto;
+        font-size: 20px;
     }
 }

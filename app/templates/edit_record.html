@@ -28,7 +28,6 @@
             src="#"
             {% endif %}
             alt="写真プレビュー" class="photo-preview" style="margin-bottom: 10px;">
-            <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
             <input type="file" id="photo" name="photo" onchange="previewImage(event)">
 
             <label for="fish_name">名称</label>
@@ -61,19 +60,19 @@
             </div>
             <label for="memo">メモ（＃でハッシュタグを追加できます）</label>
             {% if record.memo != "NoData" %}
-            <textarea id="memo" name="memo">{{ record.memo }}</textarea>
+            <textarea id="memo" name="memo" oninput="previewTags()">{{ record.memo }}</textarea>
             {% else %}
-            <textarea id="memo" name="memo"></textarea>
+            <textarea id="memo" name="memo" oninput="previewTags()"></textarea>
             {% endif %}
 
             <label for="tag-container">タグプレビュー:</label>
             <div id="tag-container" class="tag-container"></div>
-            <button type="submit" class="button">記録を保存</button>
-
             <button type="submit" class="button">記録を更新</button>
         </form>
 
         <a href="{{ url_for('view_record', record_id=record.record_id) }}" class="button">閲覧画面に戻る</a>
     </div>
+    
+    <script src="{{ url_for('static', filename='js/preview.js') }}"></script>        
 </body>
 </html>

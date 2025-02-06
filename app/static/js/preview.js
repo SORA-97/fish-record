@@ -29,3 +29,4 @@ function previewTags(event) {
 }
 
 document.getElementById('memo').addEventListener('input', previewTags);
+window.addEventListener('load', previewTags);

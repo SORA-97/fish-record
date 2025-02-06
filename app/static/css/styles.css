@@ -87,7 +87,7 @@ input::placeholder {
 }
 
 .button:hover {
-    background-color: #fdfefe;
+    background-color: #fdfefed7;
 }
 
 .select {

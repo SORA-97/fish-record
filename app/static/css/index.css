@@ -4,6 +4,50 @@
         color: #FFF;
     }
 
+    .list-maganer-container {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 10px;
+        row-gap: 10px;
+    }
+
+    .list-maganer-container > div {
+        flex: 1 1 calc(50% - 10px);
+    }
+
+    .select.tag-filter {
+        width: 100%;
+    }
+
+    .select.sort {
+        width: calc(100% - 80px);        
+    }
+
+    .button.sort {
+        background-color: #3ebfbb;
+        color: #FFF;
+        width: 70px;
+        flex-shrink: 0;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        display: inline-block;
+    }
+
+    .button.sort i {
+        color: #FFF;
+    }
+
+    .button.sort i {
+        color: #FFF;
+        transition: transform 0.2s ease;
+    }
+    
+    .button.sort.asc i {
+        transform: rotate(180deg);
+    }
+
     .card {
         margin-bottom: 24px;
         text-align: left;

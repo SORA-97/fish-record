@@ -30,24 +30,29 @@
         
         <p class="title-border">魚記録</p>
 
-        <div style="display: flex; flex-wrap: wrap; column-gap: 10px; row-gap: 10px;">
-            <label for="tag-filter" style="width: 100%;">タグで絞り込み:</label>
-            <select class="select" id="tag-filter" style="width: 100%;">
-                <option value="0">All</option>
-                {% for tag in tags %}
-                    <option value="{{ tag.tag_id }}">{{ tag.tag_name }}</option>
-                {% endfor %}
-            </select>
-
-            <label for="sort" style="width: 100%;">並び替え:</label>
-            <select class="select" id="sort" style="flex: 1 1 calc(50% - 10px);">
-                <option value="0">作成順</option>
-                <option value="1">日付順</option>
-                <option value="2">名前順</option>
-                <option value="3">サイズ順</option>
-                <option value="4">場所名順</option>
-            </select>
-            <button id="sort-order-button" class="button" style="flex: 1 1 calc(50% - 10px);">降順</button>
+        <div class="list-maganer-container">
+            <div>
+                <label for="tag-filter">タグで絞り込み</label>
+                <select class="select tag-filter" id="tag-filter">
+                    <option value="0">All</option>
+                    {% for tag in tags %}
+                        <option value="{{ tag.tag_id }}">{{ tag.tag_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="sort">並び替え</label>
+                <div class="sort-container">
+                    <select class="select sort" style="width: 60%;" id="sort">
+                        <option value="0">作成順</option>
+                        <option value="1">日付順</option>
+                        <option value="2">名前順</option>
+                        <option value="3">サイズ順</option>
+                        <option value="4">場所名順</option>
+                    </select>
+                    <button id="sort-order-button" class="button sort"><i class="fa-solid fa-arrow-down"></i></button>
+                </div>
+            </div>
         </div>
 
         <div class="records" style="margin-top: 24px;">

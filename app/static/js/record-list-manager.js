@@ -2,7 +2,7 @@ function updateRecordList() {
     const tagId = document.getElementById('tag-filter').value;
     const sortId = document.getElementById('sort').value;
     const sortOrderButton = document.getElementById('sort-order-button');
-    const sortOrder = sortOrderButton.textContent === '降順' ? 0 : 1;
+    const sortOrder = sortOrderButton.classList.contains('asc') ? 1 : 0;
 
     fetch(`/update_record_list?tag_id=${tagId}&sort_id=${sortId}&sort_order=${sortOrder}`)
         .then(response => response.json())
@@ -34,11 +34,7 @@ function updateRecordList() {
 
 function updateRecordOrder() {
     var button = this;
-    if (button.textContent === '降順') {
-        button.textContent = '昇順';
-    } else {
-        button.textContent = '降順';
-    }
+    button.classList.toggle('asc');
     updateRecordList();
 }
 

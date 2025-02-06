@@ -64,5 +64,8 @@
     .tag {
         color: #3ebfbb;
         font-weight: bold;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
     }
 }

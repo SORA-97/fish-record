@@ -20,7 +20,7 @@ function updateRecordList() {
                     const recordElement = document.createElement('li');
                     recordElement.className = 'card';
                     recordElement.innerHTML = `
-                        <a href="/record/${record.record_id}">
+                        <a href="/record/${record.record_id}" class="card-link">
                             ${record.photo_path !== 'default.jpg' ? `<img src="/static/uploads/${record.photo_path}" class="card-photo"><div class="card-photo-gradient"></div>` : ''}
                             <div class="card-title">${record.fish_name}</div>
                             <p class="small">作成日: ${record.created_at}</p>

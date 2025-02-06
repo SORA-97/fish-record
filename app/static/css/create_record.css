@@ -2,4 +2,18 @@
     .button {
         margin: 20px 0;
     }
+
+    .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .tag {
+        background-color: white;
+        border-radius: 10px;
+        padding: 5px;
+        color: #3ebfbb;
+        font-weight: bold;
+    }
 }

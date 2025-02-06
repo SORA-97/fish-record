@@ -31,3 +31,17 @@ class FishRecord(db.Model):
 
     def is_default_date(self):
         return self.date == date(1, 1, 1)
+    
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    tag_id = db.Column(db.Integer, primary_key=True)
+    tag_name = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+
+class FishRecordTag(db.Model):
+    __tablename__ = 'fish_record_tags'
+    record_id = db.Column(db.Integer, db.ForeignKey('fish_records.record_id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.tag_id'), primary_key=True)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())

@@ -31,19 +31,15 @@
         <p class="title-border">魚記録</p>
 
         <div style="display: flex; flex-wrap: wrap; column-gap: 10px; row-gap: 10px;">
-            <label style="width: 100%;">絞り込み:</label>
-            <select class="select" id="filter" style="flex: 1 1 calc(50% - 10px);">
+            <label for="tag-filter" style="width: 100%;">タグで絞り込み:</label>
+            <select class="select" id="tag-filter" style="width: 100%;">
                 <option value="0">All</option>
-                <option value="1">魚の種類別</option>
-                <option value="2">場所別</option>
-                <option value="3">時期別</option>
+                {% for tag in tags %}
+                    <option value="{{ tag.tag_id }}">{{ tag.tag_name }}</option>
+                {% endfor %}
             </select>
 
-            <select class="select" id="filter-detail" disabled style="flex: 1 1 calc(50% - 10px);">
-                <option value="">絞りこみなし</option>
-            </select>
-
-            <label style="width: 100%;">並び替え:</label>
+            <label for="sorter"  style="width: 100%;">並び替え:</label>
             <select class="select" id="sorter" style="flex: 1 1 calc(50% - 10px);">
                 <option value="0">新着順</option>
                 <option value="1">名前順</option>
@@ -56,15 +52,15 @@
             </select>
         </div>
 
-        <script src="{{ url_for('static', filename='js/filter.js') }}"></script>
-
         <div class="records" style="margin-top: 24px;">
-            {% if not records %}
-                <p style="margin: 10px 0;">まだ記録がありません。</p>
-            {% else %}
-                <p style="margin: 10px 0;">総匹数: {{ records|length }} 匹</p>
-            {% endif %}
- 
+            <p class="record-count" style="margin: 10px 0;">
+                {% if not records %}
+                    まだ記録がありません。
+                {% else %}
+                    {{ records|length }} 件中 {{ records|length }} 件を表示
+                {% endif %}
+            </p>
+
             <ul>
                 {% for record in records %}
                 <li class="card">
@@ -74,12 +70,14 @@
                         <div class="card-photo-gradient"></div>
                         {% endif %}
                         <div class="card-title">{{ record.fish_name }}</div>
-                        <p class="small">作成日: {{ record.created_at.strftime('%Y年 %m月 %d日 %H:%M') }}</p>
+                        <p class="small">作成日: {{ record.created_at_jst }}</p>
                     </a>
                 </li>
                 {% endfor %}
             </ul>
         </div>
     </div>
+
+    <script src="{{ url_for('static', filename='js/filter.js') }}"></script>
 </body>
 </html>

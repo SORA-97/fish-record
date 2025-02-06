@@ -72,6 +72,7 @@ def filter_records():
 
     user_id = session['user_id']
     tag_id = request.args.get('tag_id', type=int)
+
     if tag_id == 0:
         records = FishRecord.query.filter_by(user_id=user_id).order_by(
             FishRecord.created_at.desc(),
@@ -85,7 +86,22 @@ def filter_records():
             FishRecord.created_at.desc(),
             FishRecord.record_id.desc()
         ).all()
-    return jsonify(records=[record.to_dict() for record in records])
+
+    total_records = FishRecord.query.filter_by(user_id=user_id).count()
+
+    records_data = [{
+        'record_id': record.record_id,
+        'fish_name': record.fish_name,
+        'photo_path': record.photo_path,
+        'created_at': record.created_at.strftime('%Y-%m-%d %H:%M:%S')
+    } for record in records]
+
+    response = {
+        'total_records': total_records,
+        'records': records_data
+    }
+
+    return jsonify(response)
 
 # 記録の詳細を表示
 @app.route('/record/<record_id>')

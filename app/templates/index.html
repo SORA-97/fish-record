@@ -53,12 +53,14 @@
         </div>
 
         <div class="records" style="margin-top: 24px;">
-            {% if not records %}
-                <p style="margin: 10px 0;">まだ記録がありません。</p>
-            {% else %}
-                <p style="margin: 10px 0;">総匹数: {{ records|length }} 匹</p>
-            {% endif %}
- 
+            <p class="record-count" style="margin: 10px 0;">
+                {% if not records %}
+                    まだ記録がありません。
+                {% else %}
+                    {{ records|length }} 件中 {{ records|length }} 件を表示
+                {% endif %}
+            </p>
+
             <ul>
                 {% for record in records %}
                 <li class="card">

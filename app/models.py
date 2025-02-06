@@ -32,14 +32,6 @@ class FishRecord(db.Model):
     def is_default_date(self):
         return self.date == date(1, 1, 1)
     
-    def to_dict(self):
-        return {
-            'record_id': self.record_id,
-            'fish_name': self.fish_name,
-            'photo_path': self.photo_path,
-            'created_at': self.created_at.strftime('%Y年 %m月 %d日 %H:%M')
-        }
-    
 class Tag(db.Model):
     __tablename__ = 'tags'
     tag_id = db.Column(db.Integer, primary_key=True)

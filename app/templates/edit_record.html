@@ -25,10 +25,13 @@
             {% if record.photo_path != 'default.jpg' %}
             src="{{ url_for('static', filename='uploads/' + record.photo_path) }}"
             {% else %}
-            src="#"
+            src="#" style="display: none;"
             {% endif %}
             alt="写真プレビュー" class="photo-preview" style="margin-bottom: 10px;">
-            <input type="file" id="photo" name="photo" onchange="previewImage(event)">
+            <div style="display: flex;" class = form-button-container>
+                <input type="file" id="photo" name="photo" class="form" onchange="previewImage(event)">
+                <button type="button" class="button" onclick="clearImage()"><i class="fa-solid fa-trash"></i></button>
+            </div>
 
             <label for="fish_name">名称（画像か名称は必須です）</label>
             <input type="text" id="fish_name" name="fish_name" value="{{ record.fish_name }}" placeholder="例: サケ">

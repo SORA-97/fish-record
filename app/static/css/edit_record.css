@@ -10,10 +10,26 @@
     }
 
     .tag {
-        background-color: white;
+        background-color: #fdfefe;
         border-radius: 10px;
         padding: 5px;
         color: #3ebfbb;
         font-weight: bold;
+    }
+    
+    .form-button-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        height: 44px;
+        padding: 10px;
+    }
+
+    .form-button-container form {
+        width: calc(80% - 10px);
+    }
+
+    .form-button-container button {
+        width: 20%;
     }
 }

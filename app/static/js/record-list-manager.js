@@ -1,6 +1,10 @@
-document.getElementById('tag-filter').addEventListener('change', function() {
-    const tagId = this.value;
-    fetch(`/filter_records?tag_id=${tagId}`)
+function updateRecordList() {
+    const tagId = document.getElementById('tag-filter').value;
+    const sortId = document.getElementById('sort').value;
+    const sortOrderButton = document.getElementById('sort-order-button');
+    const sortOrder = sortOrderButton.textContent === '降順' ? 0 : 1;
+
+    fetch(`/update_record_list?tag_id=${tagId}&sort_id=${sortId}&sort_order=${sortOrder}`)
         .then(response => response.json())
         .then(data => {
             const recordsContainer = document.querySelector('.records ul');
@@ -26,4 +30,21 @@ document.getElementById('tag-filter').addEventListener('change', function() {
                 });
             }
         });
-});
+}
+
+function updateRecordOrder() {
+    var button = this;
+    if (button.textContent === '降順') {
+        button.textContent = '昇順';
+    } else {
+        button.textContent = '降順';
+    }
+    updateRecordList();
+}
+
+document.getElementById('sort-order-button').addEventListener('click', updateRecordOrder);
+document.getElementById('tag-filter').addEventListener('change', updateRecordList);
+document.getElementById('sort').addEventListener('change', updateRecordList);
+document.getElementById('sort-order').addEventListener('change', updateRecordList);
+
+window.addEventListener('load', updateRecordList);

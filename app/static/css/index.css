@@ -83,6 +83,7 @@
         font-size: large;
         font-weight: bold;
         word-wrap: break-word;
+        margin-bottom: 4px;
         width: 50%;white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;

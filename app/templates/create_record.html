@@ -22,7 +22,6 @@
         <form action="{{ url_for('create_record') }}" method="POST" class="modern-form" enctype="multipart/form-data">
             <label for="photo">画像</label>
             <img id="photo-preview" src="#" alt="写真プレビュー" class="photo-preview" style="margin-bottom: 10px;">
-            <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
             <input type="file" id="photo" name="photo" onchange="previewImage(event)">
 
             <label for="fish_name">名称</label>
@@ -41,12 +40,18 @@
                     <input type="date" id="date" name="date">
                 </div>
             </div>
-            <label for="memo">メモ（＃でハッシュタグを追加できます）</label>
-            <textarea id="memo" name="memo"></textarea>
+
+            <label for="memo">メモ（＃でタグを追加できます）</label>
+            <textarea id="memo" name="memo" oninput="previewTags()"></textarea>
+
+            <label for="tag-container">タグプレビュー:</label>
+            <div id="tag-container" class="tag-container"></div>
             <button type="submit" class="button">記録を保存</button>
         </form>
 
         <a href="{{ url_for('index') }}" class="button">一覧に戻る</a>
     </div>
+    
+    <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
 </body>
 </html>

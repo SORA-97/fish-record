@@ -13,6 +13,11 @@ def extract_tags(memo):
     pattern = r'(?<!\S)#([^\s#]+)(?=\s|$)'
     return re.findall(pattern, memo)
 
+# メモの本文からタグを強調表示
+def highlight_tags(memo):
+    pattern = r'(?<!\S)#([^\s#]+)(?=\s|$)'
+    return re.sub(pattern, r'<span class="tag">#\1</span>', memo)
+
 # 未使用のタグを削除
 def remove_unused_tags():
     unused_tags = Tag.query.outerjoin(FishRecordTag, Tag.tag_id == FishRecordTag.tag_id).filter(FishRecordTag.tag_id == None).all()
@@ -110,6 +115,7 @@ def view_record(record_id):
         return redirect('/')
     user = User.query.get(session['user_id'])
     record = FishRecord.query.get_or_404(str(record_id))
+    record.memo = highlight_tags(record.memo)
     return render_template('view_record.html', user=user, record=record)
 
 # 新しい記録の作成フォームを表示
@@ -162,8 +168,10 @@ def create_record():
             tag = Tag(tag_name=tag_name)
             db.session.add(tag)
             db.session.commit()
-        new_record_tag = FishRecordTag(record_id=new_record.record_id, tag_id=tag.tag_id)
-        db.session.add(new_record_tag)
+        existing_record_tag = FishRecordTag.query.filter_by(record_id=new_record.record_id, tag_id=tag.tag_id).first()
+        if not existing_record_tag:
+            new_record_tag = FishRecordTag(record_id=new_record.record_id, tag_id=tag.tag_id)
+            db.session.add(new_record_tag)
 
     db.session.commit()
     return redirect(url_for('index'))
@@ -208,8 +216,10 @@ def edit_record(record_id):
             tag = Tag(tag_name=tag_name)
             db.session.add(tag)
             db.session.commit()
-        new_record_tag = FishRecordTag(record_id=record.record_id, tag_id=tag.tag_id)
-        db.session.add(new_record_tag)
+        existing_record_tag = FishRecordTag.query.filter_by(record_id=record.record_id, tag_id=tag.tag_id).first()
+        if not existing_record_tag:
+            new_record_tag = FishRecordTag(record_id=record.record_id, tag_id=tag.tag_id)
+            db.session.add(new_record_tag)
 
     db.session.commit()
 

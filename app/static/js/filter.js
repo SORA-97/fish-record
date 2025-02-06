@@ -1,36 +1,25 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const filter = document.getElementById("filter");
-    const filter_detail = document.getElementById("filter-detail");
-  
-    filter.addEventListener("change", () => {
-      const selectedValue = filter.value;
-  
-      filter_detail.innerHTML = '<option value="">絞りこみなし</option>';
-      filter_detail.disabled = true;
-  
-      if (selectedValue) {
-        fetch("/get_details", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ option: selectedValue })
-        })
-          .then(response => response.json())
-          .then(data => {
-            const details = data.details;
-            if (details.length > 0) {
-              for (let i = 0; i < details.length; i++) {
-                const option = document.createElement("option");
-                option.value = details[i];
-                option.textContent = details[i];
-                filter_detail.appendChild(option);
-              }
-              filter_detail.disabled = false;
+document.getElementById('tag-filter').addEventListener('change', function() {
+    const tagId = this.value;
+    fetch(`/filter_records?tag_id=${tagId}`)
+        .then(response => response.json())
+        .then(data => {
+            const recordsContainer = document.querySelector('.records ul');
+            recordsContainer.innerHTML = '';
+            if (data.records.length === 0) {
+                recordsContainer.innerHTML = '<p style="margin: 10px 0;">まだ記録がありません。</p>';
+            } else {
+                data.records.forEach(record => {
+                    const recordElement = document.createElement('li');
+                    recordElement.className = 'card';
+                    recordElement.innerHTML = `
+                        <a href="/record/${record.record_id}">
+                            ${record.photo_path !== 'default.jpg' ? `<img src="/static/uploads/${record.photo_path}" class="card-photo"><div class="card-photo-gradient"></div>` : ''}
+                            <div class="card-title">${record.fish_name}</div>
+                            <p class="small">作成日: ${record.created_at}</p>
+                        </a>
+                    `;
+                    recordsContainer.appendChild(recordElement);
+                });
             }
-          })
-          .catch(error => console.error("Error:", error));
-      }
-    });
-  });
-  
+        });
+});

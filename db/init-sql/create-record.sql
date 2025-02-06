@@ -20,6 +20,21 @@ CREATE TABLE IF NOT EXISTS fish_records (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS tags (
+    tag_id SERIAL PRIMARY KEY,
+    tag_name TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS fish_record_tags (
+    record_id INTEGER NOT NULL REFERENCES fish_records(record_id) ON DELETE CASCADE,
+    tag_id INTEGER NOT NULL REFERENCES tags(tag_id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (record_id, tag_id)
+);
+
 -- ダミーデータ挿入
 INSERT INTO users (user_name, password) VALUES
 ('user1', 'password1'),
@@ -30,10 +45,17 @@ INSERT INTO fish_records (user_id, photo_path, fish_name, length, location, date
 (1, DEFAULT, 'サクラマス', 50.0, '北海道', '2021-01-01', 'メモ1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (1, DEFAULT, 'ニジマス', 30.0, '北海道', '2021-01-02', 'メモ2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (1, 'azisaba.png', DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, DEFAULT, 'タグテスト', DEFAULT, DEFAULT, DEFAULT, '#タグテスト', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (2, DEFAULT, 'マンボウ', 60.0, '北海道', '2021-01-03', 'メモ3', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (2, DEFAULT, 'サメ', 40.0, '北海道', '2021-01-04', 'メモ4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (3, DEFAULT, 'ながぐつ', 70.0, '北海道', '2021-01-05', 'メモ5', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (3, DEFAULT, 'タイヤ', 50.0, '北海道', '2021-01-06', 'メモ6', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO tags (tag_name) VALUES
+('タグテスト');
+
+INSERT INTO fish_record_tags (record_id, tag_id) VALUES
+(4, 1);
 
 UPDATE users SET password = 'scrypt:32768:8:1$TB4EdHmyhKDTEXDv$121dace93d5193d1e7ea38bd82e17ad2768a2a3240e0f0c1c0fcc383a099c27ce0ebfe7901548911f3d3de91fc628b135a6862ca742c572db5cad8c8fae38dda' WHERE user_name = 'user1';
 UPDATE users SET password = 'scrypt:32768:8:1$pZbQur0NFnAHY8bv$03a037c02f5e19384a5b0bedd72ebab5d8f33807ef1cccfccd7d46d1c3d201eb24efab9df90b358ccb8b9a93034142a9c41bd331e0f0710bf221330b9d0be262' WHERE user_name = 'user2';

@@ -62,7 +62,7 @@
                 {% if record.memo == "NoData" %}
                 <div class="data-value-label no-data">メモはありません</div>
                 {% else %}
-                <div class="data-value-label">{{ record.memo }}</div>
+                <div class="data-value-label">{{ record.memo | replace('\n', '<br>') | safe }}</div>
                 {% endif %}
             </div>
             <p class="small">作成日: {{ record.created_at.strftime('%Y年 %m月 %d日 %H:%M') }}</p>

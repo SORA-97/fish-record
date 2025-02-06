@@ -17,6 +17,8 @@
             </div>
         </header>
 
+        <p class="title-border">記録 - {{ record.fish_name }}</p>
+
         <div class="button-container">
             <a href="{{ url_for('index') }}" class="button"><i class="fa-solid fa-house"></i></a>
             
@@ -32,7 +34,14 @@
         <div class="contents">
             <img src="{{ url_for('static', filename='uploads/' + record.photo_path) }}" alt="{{ record.fish_name }}">
 
-            <h2>{{ record.fish_name }}</h2>
+            <div style="display: flex;">
+                <div class="data-name-label">名称</div>
+                {% if record.fish_name == "無銘の魚" %}
+                <div class="data-value-label no-data">未記入</div>
+                {% else %}
+                <div class="data-value-label">{{ record.fish_name }}</div>
+                {% endif %}
+            </div>
             <div style="display: flex;">
                 <div class="data-name-label">場所</div>
                 {% if record.location == "NoData" %}
@@ -65,6 +74,9 @@
                 <div class="data-value-label">{{ record.memo | replace('\n', '<br>') | safe }}</div>
                 {% endif %}
             </div>
+
+            <hr class="separator">
+
             <p class="small">作成日: {{ record.created_at_jst }}</p>
             <p class="small">更新日: {{ record.updated_at_jst }}</p>
         </div>

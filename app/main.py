@@ -6,14 +6,15 @@ import os
 from werkzeug.utils import secure_filename
 import uuid
 from datetime import date
+import pytz
 import re
 
-# メモの本文からタグを抽出
+# 記録のメモからタグを抽出
 def extract_tags(memo):
     pattern = r'(?<!\S)#([^\s#]+)(?=\s|$)'
     return re.findall(pattern, memo)
 
-# メモの本文からタグを強調表示
+# 記録のメモからタグを強調表示
 def highlight_tags(memo):
     pattern = r'(?<!\S)#([^\s#]+)(?=\s|$)'
     return re.sub(pattern, r'<span class="tag">#\1</span>', memo)
@@ -24,6 +25,13 @@ def remove_unused_tags():
     for tag in unused_tags:
         db.session.delete(tag)
     db.session.commit()
+
+# 日本のタイムゾーンを設定
+JST = pytz.timezone('Asia/Tokyo')
+
+# タイムゾーンを考慮して日付をフォーマットする
+def format_datetime_jst(dt):
+    return dt.astimezone(JST).strftime('%Y年 %m月 %d日 %H:%M')
 
 # .envファイルを読み込む
 load_dotenv()
@@ -67,6 +75,10 @@ def index():
         FishRecord.record_id.desc()
     ).all()
     tags = Tag.query.all()
+
+    for record in records:
+        record.created_at_jst = format_datetime_jst(record.created_at)
+    
     return render_template('index.html', user=user,records=records, tags=tags)
 
 # タグで記録を絞り込む
@@ -116,6 +128,8 @@ def view_record(record_id):
     user = User.query.get(session['user_id'])
     record = FishRecord.query.get_or_404(str(record_id))
     record.memo = highlight_tags(record.memo)
+    record.created_at_jst = format_datetime_jst(record.created_at)
+    record.updated_at_jst = format_datetime_jst(record.updated_at)
     return render_template('view_record.html', user=user, record=record)
 
 # 新しい記録の作成フォームを表示
@@ -204,6 +218,7 @@ def edit_record(record_id):
     record.location = request.form['location'] or 'NoData'
     record.date = request.form['date'] or date(1, 1, 1)
     record.memo = request.form['memo'] or 'NoData'
+    record.updated_at = db.func.now()
 
     db.session.commit()
 

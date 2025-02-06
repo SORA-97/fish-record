@@ -65,10 +65,9 @@
                 <div class="data-value-label">{{ record.memo | replace('\n', '<br>') | safe }}</div>
                 {% endif %}
             </div>
-            <p class="small">作成日: {{ record.created_at.strftime('%Y年 %m月 %d日 %H:%M') }}</p>
-            <p class="small">更新日: {{ record.updated_at.strftime('%Y年 %m月 %d日 %H:%M') }}</p>
+            <p class="small">作成日: {{ record.created_at_jst }}</p>
+            <p class="small">更新日: {{ record.updated_at_jst }}</p>
         </div>
-
     </div>
 </body>
 </html>

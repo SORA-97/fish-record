@@ -32,10 +32,15 @@
     }
 
     .form-button-container button {
+        background-color: #fdfefe;
         width: 20%;
         height: 50px;
         padding: 0;
         margin: 0;
         box-sizing: border-box;
+    }
+
+    .button:hover {
+        background-color: #f0f1f1;
     }
 }

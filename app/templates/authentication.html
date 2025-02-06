@@ -13,25 +13,6 @@
         <h3 class="sub-title">あなただけの魚図鑑を作ろう</h3>
         <h1 class="title">魚の記録帳</h1>
 
-        <form action="{{ url_for('register') }}" method="POST" class="modern-form">
-            {% with messages = get_flashed_messages(with_categories=True) %}
-                {% if messages %}
-                    {% for (category, status), message in messages %}
-                        {% if category == "register" %}
-                            <div class="flash-message {{ status }}">{{ message }}</div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-
-            <h2 class="heading">新規会員登録してはじめる</h2>  
-            <label for="username">ユーザ名</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">パスワード</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit" class="button">会員登録</button>
-        </form>
-
         <form action="{{ url_for('login') }}" method="POST" class="modern-form">
             {% with messages = get_flashed_messages(with_categories=True) %}
                 {% if messages %}
@@ -51,7 +32,25 @@
             <input type="password" id="password" name="password" required>
             <button type="submit" class="button">ログイン</button>
         </form>
-        
+
+        <form action="{{ url_for('register') }}" method="POST" class="modern-form">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for (category, status), message in messages %}
+                        {% if category == "register" %}
+                            <div class="flash-message {{ status }}">{{ message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <h2 class="heading">新規会員登録してはじめる</h2>  
+            <label for="username">ユーザ名</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">パスワード</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit" class="button">会員登録</button>
+        </form>
     </div>
 </body>
 </html>

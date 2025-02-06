@@ -13,7 +13,7 @@
         <header>
             <div class="header-container">
                 <a href="{{ url_for('index') }}" class="header-title">魚の記録帳</a>
-                <a href="{{ url_for('account') }}" class="account-icon">B</a>
+                <a href="{{ url_for('account') }}" class="account-icon">{{ user.user_name[:1] }}</a>
             </div>
         </header>
 

@@ -50,11 +50,12 @@ def index():
     if 'user_id' not in session:
         return redirect('/')
     user_id = session['user_id']
+    user = User.query.get(session['user_id'])
     records = FishRecord.query.filter_by(user_id=user_id).order_by(
         FishRecord.created_at.desc(),
         FishRecord.record_id.desc()
     ).all()
-    return render_template('index.html', records=records)
+    return render_template('index.html', user=user, records=records)
 
 # メモ一覧を絞り込むための選択肢を取得
 @app.route('/get_details', methods=['POST'])
@@ -72,15 +73,17 @@ def get_details():
 def view_record(record_id):
     if 'user_id' not in session:
         return redirect('/')
+    user = User.query.get(session['user_id'])
     record = FishRecord.query.get_or_404(str(record_id))
-    return render_template('view_record.html', record=record)
+    return render_template('view_record.html', user=user, record=record)
 
 # 新しいメモの作成フォームを表示
 @app.route('/create', methods=['GET'])
 def show_create_record():
     if 'user_id' not in session:
         return redirect('/')
-    return render_template('create_record.html')
+    user = User.query.get(session['user_id'])
+    return render_template('create_record.html', user=user)
 
 # 新しいメモを作成
 @app.route('/create', methods=['POST'])
@@ -123,8 +126,9 @@ def create_record():
 def show_edit_record(record_id):
     if 'user_id' not in session:
         return redirect('/')
+    user = User.query.get(session['user_id'])
     record = FishRecord.query.get_or_404(str(record_id))
-    return render_template('edit_record.html', record=record)
+    return render_template('edit_record.html', user=user, record=record)
 
 # メモを編集
 @app.route('/edit/<record_id>', methods=['POST'])
@@ -203,7 +207,7 @@ def delete_account():
     session.pop('user_id', None)
     return redirect('/')
 
-# ログイン画面を表示
+# 認証画面を表示
 @app.route('/', methods=['GET'])
 def authentication():
     return render_template('authentication.html')

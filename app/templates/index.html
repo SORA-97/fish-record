@@ -39,17 +39,15 @@
                 {% endfor %}
             </select>
 
-            <label for="sorter"  style="width: 100%;">並び替え:</label>
-            <select class="select" id="sorter" style="flex: 1 1 calc(50% - 10px);">
-                <option value="0">新着順</option>
-                <option value="1">名前順</option>
-                <option value="2">サイズ順</option>
+            <label for="sort" style="width: 100%;">並び替え:</label>
+            <select class="select" id="sort" style="flex: 1 1 calc(50% - 10px);">
+                <option value="0">作成順</option>
+                <option value="1">日付順</option>
+                <option value="2">名前順</option>
+                <option value="3">サイズ順</option>
+                <option value="4">場所名順</option>
             </select>
-            
-            <select class="select" id="sorter-order" style="flex: 1 1 calc(50% - 10px);">
-                <option value="0">降順</option>
-                <option value="1">昇順</option>
-            </select>
+            <button id="sort-order-button" class="button" style="flex: 1 1 calc(50% - 10px);">降順</button>
         </div>
 
         <div class="records" style="margin-top: 24px;">
@@ -78,6 +76,6 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/filter.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/record-list-manager.js') }}"></script>
 </body>
 </html>

@@ -81,29 +81,77 @@ def index():
     
     return render_template('index.html', user=user,records=records, tags=tags)
 
-# タグで記録を絞り込む
-@app.route('/filter_records', methods=['GET'])
-def filter_records():
+# 記録を絞り込み・並べ替え
+@app.route('/update_record_list', methods=['GET'])
+def update_record_list():
     if 'user_id' not in session:
         return jsonify(records=[])
 
     user_id = session['user_id']
     tag_id = request.args.get('tag_id', type=int)
+    sort_id = request.args.get('sort_id', type=int)
+    sort_order = request.args.get('sort_order', type=int)
 
-    if tag_id == 0:
-        records = FishRecord.query.filter_by(user_id=user_id).order_by(
-            FishRecord.created_at.desc(),
-            FishRecord.record_id.desc()
-        ).all()
-    else:
-        records = FishRecord.query.join(FishRecordTag).filter(
-            FishRecordTag.tag_id == tag_id,
-            FishRecord.user_id == user_id
-        ).order_by(
-            FishRecord.created_at.desc(),
-            FishRecord.record_id.desc()
-        ).all()
+    query = FishRecord.query.filter_by(user_id=user_id)
 
+    if tag_id != 0:
+        query = query.join(FishRecordTag).filter(FishRecordTag.tag_id == tag_id)
+
+    if sort_id == 0:
+        if sort_order == 0:
+            query = query.order_by(
+                FishRecord.record_id.desc(),
+            )
+        else:
+            query = query.order_by(
+                FishRecord.record_id.asc()
+            )
+    elif sort_id == 1:
+        if sort_order == 0:
+            query = query.order_by(
+                FishRecord.date.desc(),
+                FishRecord.record_id.desc()
+            )
+        else:
+            query = query.order_by(
+                FishRecord.date.asc(),
+                FishRecord.record_id.asc()
+            )
+    elif sort_id == 2:
+        if sort_order == 0:
+            query = query.order_by(
+                FishRecord.fish_name.desc(),
+                FishRecord.record_id.desc()
+            )
+        else:
+            query = query.order_by(
+                FishRecord.fish_name.asc(),
+                FishRecord.record_id.asc()
+            )
+    elif sort_id == 3:
+        if sort_order == 0:
+            query = query.order_by(
+                FishRecord.length.desc(),
+                FishRecord.record_id.desc()
+            )
+        else:
+            query = query.order_by(
+                FishRecord.length.asc(),
+                FishRecord.record_id.asc()
+            )
+    elif sort_id == 4:
+        if sort_order == 0:
+            query = query.order_by(
+                FishRecord.location.desc(),
+                FishRecord.record_id.desc()
+            )
+        else:
+            query = query.order_by(
+                FishRecord.location.asc(),
+                FishRecord.record_id.asc()
+            )
+
+    records = query.all()
     total_records = FishRecord.query.filter_by(user_id=user_id).count()
 
     records_data = [{
@@ -119,6 +167,23 @@ def filter_records():
     }
 
     return jsonify(response)
+
+# 記録を並べ替え
+@app.route('/sort_records', methods=['GET'])
+def sort_records():
+    if 'user_id' not in session:
+        return jsonify(records=[])
+
+    user_id = session['user_id']
+    sort_id = request.args.get('tag_id', type=int)
+
+    if sort_id == 0:
+        records = FishRecord.query.filter_by(user_id=user_id).order_by(
+            FishRecord.created_at.desc(),
+            FishRecord.record_id.desc()
+        ).all()
+
+    
 
 # 記録の詳細を表示
 @app.route('/record/<record_id>')

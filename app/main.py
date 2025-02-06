@@ -1,11 +1,24 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import db, FishRecord, User
+from app.models import db, FishRecord, User, Tag, FishRecordTag
 from dotenv import load_dotenv
 import os
 from werkzeug.utils import secure_filename
 import uuid
 from datetime import date
+import re
+
+# メモの本文からタグを抽出
+def extract_tags(memo):
+    pattern = r'(?<!\S)#([^\s#]+)(?=\s|$)'
+    return re.findall(pattern, memo)
+
+# 未使用のタグを削除
+def remove_unused_tags():
+    unused_tags = Tag.query.outerjoin(FishRecordTag, Tag.tag_id == FishRecordTag.tag_id).filter(FishRecordTag.tag_id == None).all()
+    for tag in unused_tags:
+        db.session.delete(tag)
+    db.session.commit()
 
 # .envファイルを読み込む
 load_dotenv()
@@ -37,14 +50,7 @@ db.init_app(app)
 def create_tables():
     db.create_all()
 
-details = {
-    "0": [],
-    "1": ["サバ", "タイ", "アジ", "マンボウ", "その他"],
-    "2": ["池", "川", "海", "その他"],
-    "3": ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
-}
-
-# メモ一覧を表示
+# 記録一覧を表示
 @app.route('/home')
 def index():
     if 'user_id' not in session:
@@ -55,20 +61,33 @@ def index():
         FishRecord.created_at.desc(),
         FishRecord.record_id.desc()
     ).all()
-    return render_template('index.html', user=user, records=records)
+    tags = Tag.query.all()
+    return render_template('index.html', user=user,records=records, tags=tags)
 
-# メモ一覧を絞り込むための選択肢を取得
-@app.route('/get_details', methods=['POST'])
-def get_details():
+# タグで記録を絞り込む
+@app.route('/filter_records', methods=['GET'])
+def filter_records():
     if 'user_id' not in session:
-        return redirect('/')
-    data = request.json
-    detail = data.get("option", "")
-    if detail in details:
-        return jsonify({"details": details[detail]})
-    return jsonify({"details": []})
+        return jsonify(records=[])
 
-# メモの詳細を表示
+    user_id = session['user_id']
+    tag_id = request.args.get('tag_id', type=int)
+    if tag_id == 0:
+        records = FishRecord.query.filter_by(user_id=user_id).order_by(
+            FishRecord.created_at.desc(),
+            FishRecord.record_id.desc()
+        ).all()
+    else:
+        records = FishRecord.query.join(FishRecordTag).filter(
+            FishRecordTag.tag_id == tag_id,
+            FishRecord.user_id == user_id
+        ).order_by(
+            FishRecord.created_at.desc(),
+            FishRecord.record_id.desc()
+        ).all()
+    return jsonify(records=[record.to_dict() for record in records])
+
+# 記録の詳細を表示
 @app.route('/record/<record_id>')
 def view_record(record_id):
     if 'user_id' not in session:
@@ -77,7 +96,7 @@ def view_record(record_id):
     record = FishRecord.query.get_or_404(str(record_id))
     return render_template('view_record.html', user=user, record=record)
 
-# 新しいメモの作成フォームを表示
+# 新しい記録の作成フォームを表示
 @app.route('/create', methods=['GET'])
 def show_create_record():
     if 'user_id' not in session:
@@ -85,7 +104,7 @@ def show_create_record():
     user = User.query.get(session['user_id'])
     return render_template('create_record.html', user=user)
 
-# 新しいメモを作成
+# 新しい記録を作成
 @app.route('/create', methods=['POST'])
 def create_record():
     if 'user_id' not in session:
@@ -119,9 +138,21 @@ def create_record():
 
     db.session.add(new_record)
     db.session.commit()
+
+    tags = extract_tags(new_memo)
+    for tag_name in tags:
+        tag = Tag.query.filter_by(tag_name=tag_name).first()
+        if not tag:
+            tag = Tag(tag_name=tag_name)
+            db.session.add(tag)
+            db.session.commit()
+        new_record_tag = FishRecordTag(record_id=new_record.record_id, tag_id=tag.tag_id)
+        db.session.add(new_record_tag)
+
+    db.session.commit()
     return redirect(url_for('index'))
 
-# メモの編集フォームを表示
+# 記録の編集フォームを表示
 @app.route('/edit/<record_id>', methods=['GET'])
 def show_edit_record(record_id):
     if 'user_id' not in session:
@@ -130,7 +161,7 @@ def show_edit_record(record_id):
     record = FishRecord.query.get_or_404(str(record_id))
     return render_template('edit_record.html', user=user, record=record)
 
-# メモを編集
+# 記録を編集
 @app.route('/edit/<record_id>', methods=['POST'])
 def edit_record(record_id):
     if 'user_id' not in session:
@@ -151,16 +182,37 @@ def edit_record(record_id):
     record.memo = request.form['memo'] or 'NoData'
 
     db.session.commit()
+
+    FishRecordTag.query.filter_by(record_id=record.record_id).delete()
+
+    tags = extract_tags(record.memo)
+    for tag_name in tags:
+        tag = Tag.query.filter_by(tag_name=tag_name).first()
+        if not tag:
+            tag = Tag(tag_name=tag_name)
+            db.session.add(tag)
+            db.session.commit()
+        new_record_tag = FishRecordTag(record_id=record.record_id, tag_id=tag.tag_id)
+        db.session.add(new_record_tag)
+
+    db.session.commit()
+
+    remove_unused_tags()
+
     return redirect(url_for('index'))
 
-# メモを削除
+# 記録を削除
 @app.route('/record/<record_id>/delete', methods=['POST'])
 def delete_record(record_id):
     if 'user_id' not in session:
         return redirect('/')
     record = FishRecord.query.get_or_404(str(record_id))
+
     db.session.delete(record)
     db.session.commit()
+
+    remove_unused_tags()
+
     return redirect(url_for('index'))
 
 # アカウント情報を表示
@@ -199,11 +251,16 @@ def delete_account():
     if 'user_id' not in session:
         return redirect('/')
     user_id = session['user_id']
+
     FishRecord.query.filter_by(user_id=user_id).delete()
+
     user = User.query.get(user_id)
     if user:
         db.session.delete(user)
         db.session.commit()
+
+    remove_unused_tags()
+
     session.pop('user_id', None)
     return redirect('/')
 

@@ -87,7 +87,7 @@ input::placeholder {
 }
 
 .button:hover {
-    background-color: #fdfefed7;
+    background-color: #f0f1f1;
 }
 
 .select {
@@ -246,6 +246,15 @@ header {
 
 .button.create:hover {
     background-color: #26a7a2;
+}
+
+.button.delete {
+    color: #FFF;
+    background-color: #ff7260;
+}
+
+.button.delete:hover {
+    background-color: #e25b49;
 }
 
 .flash-message {

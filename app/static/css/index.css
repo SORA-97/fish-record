@@ -16,23 +16,40 @@
     }
 
     .select.tag-filter {
+        display: flex;
         width: 100%;
+        height: 44px;
+    }
+
+    .sort-container {
+        display: flex;
+        width: 100%;
+        flex-wrap: nowrap;
     }
 
     .select.sort {
-        width: calc(100% - 80px);        
+        width: calc(100% - 55px);
+        height: 44px;
+        border-radius: 10px 0 0 10px;
     }
 
     .button.sort {
         background-color: #3ebfbb;
         color: #FFF;
-        width: 70px;
+        width: 50px;
+        height: 44px;
+        margin-left: 5px;
         flex-shrink: 0;
-        margin-left: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         display: inline-block;
+        border-radius: 0 10px 10px 0;
+        transition: background-color 0.2s;
+    }
+    
+    .button.sort:hover {
+        background-color: #26a7a2;
     }
 
     .button.sort i {
@@ -65,26 +82,29 @@
     .card .card-title {
         font-size: large;
         font-weight: bold;
-        margin-bottom: 4px;
+        word-wrap: break-word;
+        width: 50%;white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .card-photo {
         position: absolute;
-        right: -20px;
+        right: -60px;
         top: 50%;
         transform: translateY(-50%);
-        width: 200px;
+        width: 300px;
         height: auto;
         opacity: 0.5;
     }
 
     .card-photo-gradient {
         position: absolute;
-        right: 130px;
+        right: 170px;
         top: 50%;
         transform: translateY(-50%);
-        width: 60px;
+        width: 100px;
         height: 110%;
-        background: linear-gradient(to right, #fdfefe 20%, rgba(233, 236, 239, 0) 100%);
+        background: linear-gradient(to right, #fdfefe 30%, rgba(233, 236, 239, 0) 100%);
     }
 }

@@ -8,7 +8,8 @@ app/__pycache__/*
 docs/desktop.ini
 app/static/uploads/*
 !app/static/uploads/default.jpg
-
+!app/static/uploads/samples
+!app/static/uploads/samples/*
 logs/
 *.log
 Thumbs.db

@@ -10,7 +10,7 @@
     }
 
     .tag {
-        background-color: white;
+        background-color: #fdfefe;
         border-radius: 10px;
         padding: 5px;
         color: #3ebfbb;
@@ -32,5 +32,31 @@
         width: auto;
         font-size: 20px;
         margin-top: 0;
+      
+    .form-button-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .form-button-container form {
+        width: calc(80% - 10px);
+        height: 50px;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .form-button-container button {
+        background-color: #fdfefe;
+        width: 20%;
+        height: 50px;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .form-button-container button:hover {
+        background-color: #f0f1f1;
     }
 }

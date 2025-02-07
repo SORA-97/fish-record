@@ -26,17 +26,24 @@
 
         <form action="{{ url_for('edit_record', record_id=record.record_id) }}" method="POST" class="modern-form" style="margin-top: 0;" enctype="multipart/form-data" onsubmit="return validateForm()">
             <label for="photo">画像（画像か名称は必須です）</label>
-            <img id="photo-preview"
+            <img id="photo-preview" class="photo-preview"
             {% if record.photo_path != 'default.jpg' %}
             src="{{ url_for('static', filename='uploads/' + record.photo_path) }}"
             {% else %}
-            src="#"
+            src="#" style="display: none;"
             {% endif %}
-            alt="写真プレビュー" class="photo-preview" style="margin-bottom: 10px;">
-            <input type="file" id="photo" name="photo" onchange="previewImage(event)">
+            alt="写真プレビュー">
+            <div style="display: flex;" class = form-button-container>
+                <input type="file" id="photo" name="photo" class="form" onchange="previewImage(event)">
+                <button type="button" class="button" onclick="clearPreviewImage()"><i class="fa-solid fa-trash"></i></button>
+            </div>
 
             <label for="fish_name">名称（画像か名称は必須です）</label>
-            <input type="text" id="fish_name" name="fish_name" value="{{ record.fish_name }}" placeholder="例: サケ">
+            <input type="text" id="fish_name" name="fish_name"
+                {% if record.fish_name != "無銘の魚" %}
+                    value="{{ record.fish_name }}"
+                {% endif %}
+            placeholder="例: サケ">
 
             <label for="location">場所</label>
             <input type="text" id="location" name="location" placeholder="例: 東京湾"

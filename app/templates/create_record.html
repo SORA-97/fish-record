@@ -18,8 +18,12 @@
         </header>
 
         <p class="title-border">記録 - 新規作成</p>
+        
+        <div class="button-container">
+            <a href="{{ url_for('index') }}" class="button"><i class="fa-solid fa-house"></i></a>
+        </div>
 
-        <form action="{{ url_for('create_record') }}" method="POST" class="modern-form" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form action="{{ url_for('create_record') }}" method="POST" class="modern-form" style="margin-top: 0;" enctype="multipart/form-data" onsubmit="return validateForm()">
             <label for="photo">画像（画像か名称は必須です）</label>
             <img id="photo-preview" src="#" alt="写真プレビュー" class="photo-preview" style="margin-bottom: 10px;">
             <input type="file" id="photo" name="photo" onchange="previewImage(event)">
@@ -48,8 +52,6 @@
             <div id="tag-container" class="tag-container"></div>
             <button type="submit" class="button">記録を保存</button>
         </form>
-
-        <a href="{{ url_for('index') }}" class="button">一覧に戻る</a>
     </div>
     
     <script src="{{ url_for('static', filename='js/preview.js') }}"></script>

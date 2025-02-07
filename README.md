@@ -1,5 +1,7 @@
 ## <span style="color:rgb(93, 185, 182); ">このファイルは何？</span>
-環境構築などの手順と、アプリの概要について記述するファイルです。開発環境の操作方法などについては、`docs/references`を閲覧してください!  
+環境構築などの手順と、アプリの概要について記述するファイルです。
+アプリケーションの操作は`docs/fish-record-demo.mp4`で解説しています。  
+開発環境の操作方法などについては、`docs/references`を閲覧してください!  
 
 ## <span style="color:rgb(93, 185, 182); ">魚の記録帳</span>  
 日々の釣果を記録する、おさかな特化の日記アプリです。
@@ -59,65 +61,6 @@ POSTGRES_PASSWORD=password
 POSTGRES_DB=guest
 POSTGRES_HOST=db
 ```
-
-## <span style="color:rgb(93, 185, 182); ">ファイル構成</span>
-ファイル構成を以下に示します。ファイルに欠け等あって起動できない場合は、リポジトリのオーナーにご確認ください。  
-
-<details><summary>ファイル構成</summary>
-
-```
-.env
-.gitignore
-app/
-    __init__.py
-    __pycache__/
-        __init__.cpython-311.pyc
-        main.cpython-311.pyc
-        models.cpython-311.pyc
-    Dockerfile
-    main.py
-    models.py
-    requirements.txt
-    static/
-        css/
-            account.css
-            authentication.css
-            create_record.css
-            edit_record.css
-            index.css
-            styles.css
-            view_record.css
-        js/
-            preview.js
-            record-list-manager.js
-            validate-form.js
-        uploads/
-    templates/
-        account.html
-        authentication.html
-        create_record.html
-        edit_record.html
-        index.html
-        view_record.html
-compose.yml
-db/
-    Dockerfile
-    init-sql/
-        create-record.sql
-        init-pgcrypto.sql
-docs/
-    desktop.ini
-    figures/
-        persona.png
-        storyboard.png
-    references/
-        how_to_docker.md
-        links.md
-        plan.md
-        plan_example.md
-README.md
-```
-</details>
 
 ## <span style="color:rgb(93, 185, 182); ">リンク集</span>  
 ### リモートリポジトリ  

@@ -261,7 +261,7 @@ def edit_record(record_id):
         new_photo.save(upload_folder + '/' + new_photo_path)
         record.photo_path = new_photo_path
     else:
-        record.photo_path = default_photo_path
+        record.photo_path = request.form['existing_photo_path']
         
     record.fish_name = request.form['fish_name'] or '無銘の魚'
     record.length = request.form['length'] or 999999

@@ -1,11 +1,27 @@
 function previewImage(event) {
     var reader = new FileReader();
+    var file = event.target.files[0];
+
+    if (!file) {
+        clearPreviewImage();
+        return;
+    }
+
     reader.onload = function(){
         var output = document.getElementById('photo-preview');
         output.src = reader.result;
         output.style.display = 'block';
     };
-    reader.readAsDataURL(event.target.files[0]);
+    reader.readAsDataURL(file);
+
+    input.value = '';
+}
+
+function clearPreviewImage() {
+    var output = document.getElementById('photo-preview');
+    output.src = '#';
+    document.getElementById('photo').value = '';
+    output.style.display = 'none';
 }
 
 function previewTags(event) {

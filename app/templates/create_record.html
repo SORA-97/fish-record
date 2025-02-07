@@ -21,8 +21,11 @@
 
         <form action="{{ url_for('create_record') }}" method="POST" class="modern-form" enctype="multipart/form-data" onsubmit="return validateForm()">
             <label for="photo">画像（画像か名称は必須です）</label>
-            <img id="photo-preview" src="#" alt="写真プレビュー" class="photo-preview" style="margin-bottom: 10px;">
-            <input type="file" id="photo" name="photo" onchange="previewImage(event)">
+            <img id="photo-preview" src="#" alt="写真プレビュー" class="photo-preview" style="display: none;">
+            <div class = form-button-container>
+                <input type="file" id="photo" name="photo" class="form" onchange="previewImage(event)">
+                <button type="button" class="button" onclick="clearPreviewImage()"><i class="fa-solid fa-trash"></i></button>
+            </div>
 
             <label for="fish_name">名称（画像か名称は必須です）</label>
             <input type="text" id="fish_name" name="fish_name" placeholder="例: サケ">

@@ -168,23 +168,6 @@ def update_record_list():
 
     return jsonify(response)
 
-# 記録を並べ替え
-@app.route('/sort_records', methods=['GET'])
-def sort_records():
-    if 'user_id' not in session:
-        return jsonify(records=[])
-
-    user_id = session['user_id']
-    sort_id = request.args.get('tag_id', type=int)
-
-    if sort_id == 0:
-        records = FishRecord.query.filter_by(user_id=user_id).order_by(
-            FishRecord.created_at.desc(),
-            FishRecord.record_id.desc()
-        ).all()
-
-    
-
 # 記録の詳細を表示
 @app.route('/record/<record_id>')
 def view_record(record_id):

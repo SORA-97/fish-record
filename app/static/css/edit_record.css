@@ -20,6 +20,25 @@
         text-overflow: ellipsis;
     }
     
+    .button-container {
+        display: flex;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+
+    .button-container > a:first-child {
+        width: auto;
+        font-size: 20px;
+        margin-right: 10px;
+        margin-top: 0;
+    }
+    
+    .button-container > a:nth-child(2) {
+        margin-right: auto;
+        width: auto;
+        font-size: 20px;
+        margin-top: 0;
+      
     .form-button-container {
         display: flex;
         justify-content: space-between;
@@ -43,7 +62,7 @@
         box-sizing: border-box;
     }
 
-    .button:hover {
+    .form-button-container button:hover {
         background-color: #f0f1f1;
     }
 }

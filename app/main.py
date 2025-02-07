@@ -254,12 +254,15 @@ def edit_record(record_id):
         return redirect('/')
     record = FishRecord.query.get_or_404(str(record_id))
 
+    photo_status = request.form['photo_status']
     new_photo = request.files['photo']
     if new_photo:
         filename = secure_filename(new_photo.filename)
         new_photo_path = filename
         new_photo.save(upload_folder + '/' + new_photo_path)
         record.photo_path = new_photo_path
+    elif photo_status == 'cleared':
+        record.photo_path = default_photo_path
     else:
         record.photo_path = request.form['existing_photo_path']
         

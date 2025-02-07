@@ -126,6 +126,12 @@ https://github.com/SORA-97/fish-record
 ### カンバンボード
 https://github.com/users/SORA-97/projects/1/views/1
 
+### Figma
+デザインエディタ（閲覧のみ可能）  
+https://www.figma.com/design/sJIGsQbKKmvAbIuJBbLvTl/%E9%AD%9A%E5%9B%B3%E9%91%91?node-id=0-1&t=nmH5fwbsboVWyCrS-1  
+プロトタイプ  
+https://www.figma.com/proto/sJIGsQbKKmvAbIuJBbLvTl/%E9%AD%9A%E5%9B%B3%E9%91%91?node-id=0-1&t=nmH5fwbsboVWyCrS-1  
+
 ### 参考:写真から探せる魚図鑑
 サンプルデータにて画像を引用   
 https://fishai.jp/  
@@ -137,6 +143,7 @@ https://dailyportalz.jp/kiji/150622193882
 ### 参考:【作って学ぼう】Flask Webアプリ開発入門 ~課題メモアプリ~  
 サンプルを流用  
 https://zenn.dev/urassh/books/fec2793bf80acd  
+
 
 ## <span style="color:rgb(93, 185, 182); ">クレジット</span>
 ### プロジェクトマネージャー 廣橋空

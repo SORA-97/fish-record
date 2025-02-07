@@ -21,7 +21,10 @@
         <header>
             <div class="header-container">
                 <a href="{{ url_for('index') }}" class="header-title">魚の記録帳</a>
-                <a href="{{ url_for('account') }}" class="account-icon">{{ user.user_name[:1] }}</a>
+                <a href="{{ url_for('account') }}" class="account-icon">
+                    <div class="icon-initial">{{ user.user_name[:1] }}</div>
+                    <div class="username">{{ user.user_name }}</div>
+                </a>
             </div>
             <a href="{{ url_for('show_create_record') }}" class="button create">
                 <i class="fa-solid fa-fish" style="color: #fff;"></i> 記録する

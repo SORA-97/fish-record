@@ -226,7 +226,6 @@ header {
     font-weight: bold;
     text-align: center;
     border-bottom: 2px solid #c0c0c0;
-    margin: 0;
     text-decoration: none;
     color: inherit;
 }
@@ -245,8 +244,30 @@ header {
     right: 20px;
 }
 
+.account-icon:hover .username {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.icon-initial {
+    color: #fff;
+}
+
+.username {
+    display: block;
+    opacity: 0;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    color: #000;
+    transition: opacity 0.3s, transform 0.3s;
+    transform: translateY(-10px);
+    pointer-events: none;
+}
+
 .button.create {
-    margin-top: 20px;
+    margin-top: 40px;
     background-color: #3ebfbb;
     color: #FFF;
     width: 100%;

@@ -100,3 +100,5 @@ https://github.com/kaison302
 
 ### テストリーダー 宇治雅貴
 https://github.com/masa785
+
+リリース：2025年2月7日
